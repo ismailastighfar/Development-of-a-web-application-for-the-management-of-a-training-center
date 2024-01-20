@@ -1,8 +1,10 @@
 package com.fst.trainingcenter.mappers;
 
 
+import com.fst.trainingcenter.dtos.CompanyDTO;
 import com.fst.trainingcenter.dtos.IndividualDTO;
 import com.fst.trainingcenter.dtos.TrainerDTO;
+import com.fst.trainingcenter.entities.Company;
 import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
 import org.springframework.beans.BeanUtils;
@@ -31,5 +33,17 @@ public class MappersImpl {
        Individual individual = new Individual();
         BeanUtils.copyProperties(individualDTO,individual);
         return  individual;
+    }
+
+    public Company fromCompanyDTO(CompanyDTO companyDTO){
+        Company company = new Company();
+        BeanUtils.copyProperties(companyDTO,company);
+        return  company;
+    }
+
+    public CompanyDTO fromCompany(Company company){
+        CompanyDTO companyDTO = new CompanyDTO();
+        BeanUtils.copyProperties(company,companyDTO);
+        return  companyDTO;
     }
 }

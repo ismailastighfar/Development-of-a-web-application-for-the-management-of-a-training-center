@@ -62,6 +62,8 @@ public class IndividualServiceImpl implements IndividualService {
         AppRole role = securityService.findRoleByRoleName("INDIVIDUAL");
         securityService.addRoleToUser(role.getRoleName(),individualSaved.getEmail());
         return mappers.fromIndividual(individualSaved);
+
+
     }
 
     @Override

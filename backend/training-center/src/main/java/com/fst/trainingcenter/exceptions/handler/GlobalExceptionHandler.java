@@ -1,10 +1,7 @@
 package com.fst.trainingcenter.exceptions.handler;
 
 
-import com.fst.trainingcenter.exceptions.IndividualAlreadyExistsException;
-import com.fst.trainingcenter.exceptions.IndividualNotFoundException;
-import com.fst.trainingcenter.exceptions.TrainerAlreadyExistsException;
-import com.fst.trainingcenter.exceptions.TrainerNotFoundException;
+import com.fst.trainingcenter.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +12,18 @@ import java.util.Date;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(CompanyNotFoundException.class)
+    public ResponseEntity<?> resourceNotFoundException(CompanyNotFoundException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CompanyAlreadyExistsException.class)
+    public ResponseEntity<?> resourceNotFoundException(CompanyAlreadyExistsException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
 
     @ExceptionHandler(TrainerNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundException(TrainerNotFoundException ex, WebRequest request) {
