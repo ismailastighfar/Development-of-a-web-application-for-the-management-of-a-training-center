@@ -2,7 +2,9 @@ package com.fst.trainingcenter.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -14,5 +16,5 @@ public class IndividualDTO {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String email;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 }

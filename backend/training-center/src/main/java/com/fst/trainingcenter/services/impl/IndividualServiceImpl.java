@@ -56,6 +56,7 @@ public class IndividualServiceImpl implements IndividualService {
         newIndividual.setPhone(individual.getPhone());
         String password = individual.getPassword();
         newIndividual.setPassword(passwordEncoder.encode(password));
+        
         newIndividual.setDateOfBirth(individual.getDateOfBirth());
         Individual individualSaved = individualRepository.save(newIndividual);
         AppRole role = securityService.findRoleByRoleName("INDIVIDUAL");

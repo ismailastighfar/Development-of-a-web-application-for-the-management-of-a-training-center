@@ -1,14 +1,11 @@
 package com.fst.trainingcenter.web;
 
 import com.fst.trainingcenter.dtos.IndividualDTO;
-import com.fst.trainingcenter.dtos.TrainerDTO;
-import com.fst.trainingcenter.dtos.TrainerRequestDTO;
 import com.fst.trainingcenter.exceptions.IndividualAlreadyExistsException;
 import com.fst.trainingcenter.exceptions.IndividualNotFoundException;
-import com.fst.trainingcenter.exceptions.TrainerAlreadyExistsException;
-import com.fst.trainingcenter.exceptions.TrainerNotFoundException;
+
 import com.fst.trainingcenter.services.IndividualService;
-import com.fst.trainingcenter.services.TrainerService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

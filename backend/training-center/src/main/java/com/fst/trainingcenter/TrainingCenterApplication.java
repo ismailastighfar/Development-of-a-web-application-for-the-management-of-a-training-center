@@ -1,6 +1,8 @@
 package com.fst.trainingcenter;
 
+import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
+import com.fst.trainingcenter.repositories.IndividualRepository;
 import com.fst.trainingcenter.repositories.TrainerRepository;
 import com.fst.trainingcenter.security.entities.AppRole;
 import com.fst.trainingcenter.security.entities.AppUser;
@@ -11,6 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class TrainingCenterApplication {
@@ -26,8 +30,8 @@ public class TrainingCenterApplication {
 
 	@Bean
 	CommandLineRunner commandLineRunner(ISecurityService securityService , TrainerRepository trainerRepository
-			, PasswordEncoder passwordEncoder
-	){
+			, PasswordEncoder passwordEncoder, IndividualRepository individualRepository
+										){
 		return args -> {
 
 			AppUser user = AppUser.builder().
@@ -38,6 +42,7 @@ public class TrainingCenterApplication {
 			AppRole role = AppRole.builder()
 					.roleName("ADMIN")
 					.build();
+
 			securityService.addNewUser(user);
 			securityService.addNewRole(role);
 			securityService.addRoleToUser(role.getRoleName(),user.getEmail());
@@ -58,6 +63,19 @@ public class TrainingCenterApplication {
 			securityService.addNewRole(role1);
 			securityService.addRoleToUser(role1.getRoleName(), trainer.getEmail());
 
+			AppRole role2 = AppRole.builder()
+					.roleName("INDIVIDUAL")
+					.build();
+			securityService.addNewRole(role2);
+			Individual individual = new Individual();
+			individual.setNom("yahya");
+			individual.setSurname("azzouz");
+			individual.setEmail("yahya@gmail.com");
+			individual.setPassword(passwordEncoder.encode("12345"));
+			individual.setPhone("06025");
+			individual.setDateOfBirth(LocalDate.parse("2000-01-04"));
+			individualRepository.save(individual);
+			securityService.addRoleToUser(role2.getRoleName(), individual.getEmail());
 		};
 	}
 }
