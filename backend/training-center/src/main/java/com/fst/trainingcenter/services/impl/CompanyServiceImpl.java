@@ -63,17 +63,14 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDTO updateCompany(Long id, CompanyDTO companyDTO) throws CompanyNotFoundException {
 
-
-        Company company=mappers.fromCompanyDTO(companyDTO);
-        Company companyExist = companyRepository.findById(id).orElseThrow(
+        companyRepository.findById(id).orElseThrow(
                 ()->new CompanyNotFoundException("Company Not Found With Id = "+id)
         );
-        companyExist.setName(company.getName());
-        companyExist.setPhone(company.getPhone());
-        companyExist.setEmail(company.getEmail());
-        companyExist.setAddress(company.getAddress());
-        companyExist.setUrl(company.getUrl());
-        Company companySaved=companyRepository.save(companyExist);
+
+        Company company=mappers.fromCompanyDTO(companyDTO);
+        company.setId(id);
+
+        Company companySaved=companyRepository.save(company);
         return mappers.fromCompany(companySaved);
 
     }

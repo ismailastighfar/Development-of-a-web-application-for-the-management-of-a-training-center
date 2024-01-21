@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Training {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private long id;
     private String title;
     private int hours;
@@ -18,9 +20,9 @@ public class Training {
     private String objectives;
     private String detailed_program;
     private String category;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Trainer trainer;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Company company;
 
 }

@@ -4,9 +4,11 @@ package com.fst.trainingcenter.mappers;
 import com.fst.trainingcenter.dtos.CompanyDTO;
 import com.fst.trainingcenter.dtos.IndividualDTO;
 import com.fst.trainingcenter.dtos.TrainerDTO;
+import com.fst.trainingcenter.dtos.TrainingDTO;
 import com.fst.trainingcenter.entities.Company;
 import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
+import com.fst.trainingcenter.entities.Training;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -41,9 +43,24 @@ public class MappersImpl {
         return  company;
     }
 
+    public Training fromTrainingDTO(TrainingDTO trainingDTO){
+        Training training = new Training();
+        BeanUtils.copyProperties(trainingDTO,training);
+        return training;
+    }
+
+
     public CompanyDTO fromCompany(Company company){
         CompanyDTO companyDTO = new CompanyDTO();
         BeanUtils.copyProperties(company,companyDTO);
         return  companyDTO;
     }
+
+    public TrainingDTO fromTraining(Training training){
+        TrainingDTO trainingDTO = new TrainingDTO();
+        BeanUtils.copyProperties(training,trainingDTO);
+        return  trainingDTO;
+    }
+
+
 }

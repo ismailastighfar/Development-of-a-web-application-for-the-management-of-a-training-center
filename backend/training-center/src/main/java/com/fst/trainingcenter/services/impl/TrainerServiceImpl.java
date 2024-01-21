@@ -38,7 +38,7 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public TrainerDTO getTrainer(Long id) throws TrainerNotFoundException {
         Trainer trainer =  trainerRepository.findById(id).orElseThrow(
-                () -> new TrainerNotFoundException("trainer not exist!!")
+                () -> new TrainerNotFoundException("Trainer  With Id = `"+id+ "` Does Not Exist!")
         );
         return mappers.fromTrainer(trainer);
     }
@@ -48,7 +48,7 @@ public class TrainerServiceImpl implements TrainerService {
         Trainer trainer = mappers.fromTrainerDTO(trainerDTO);
         AppUser user = securityService.findUserByEmail(trainer.getEmail());
         if (user != null)
-          throw new TrainerAlreadyExistsException("trainer already exists !!");
+          throw new TrainerAlreadyExistsException("Trainer  With Id = `"+trainer.getId()+ "` Already Exists!");
         Trainer newTrainer = new Trainer();
         newTrainer.setNom(trainer.getNom());
         newTrainer.setSurname(trainer.getSurname());

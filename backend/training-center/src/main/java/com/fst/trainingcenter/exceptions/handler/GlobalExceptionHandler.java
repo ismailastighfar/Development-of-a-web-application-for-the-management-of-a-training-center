@@ -25,6 +25,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(TrainingAlreadyExistsException.class)
+    public ResponseEntity<?> resourceNotFoundException(TrainingAlreadyExistsException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+
+    @ExceptionHandler(TrainingNotFoundException.class)
+    public ResponseEntity<?> resourceNotFoundException(TrainingNotFoundException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(TrainerNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundException(TrainerNotFoundException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
