@@ -65,4 +65,22 @@ public class TrainerController {
                 HttpStatus.OK
         );
     }
+
+    @PostMapping("/trainers/accept/{id}")
+    public ResponseEntity<TrainerDTO> acceptTrainer(@PathVariable Long id) throws TrainerNotFoundException, TrainerAlreadyExistsException {
+        return new ResponseEntity<>(
+                trainerService.acceptTrainer(id),
+                HttpStatus.OK
+        );
+    }
+
+    @DeleteMapping("/trainers/refuse/{id}")
+    public ResponseEntity<Void> refuseTrainer(@PathVariable Long id) throws TrainerNotFoundException, TrainerAlreadyExistsException {
+        boolean deleted = trainerService.refuseTrainer(id);
+        if (!deleted)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

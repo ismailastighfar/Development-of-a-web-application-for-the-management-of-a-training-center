@@ -15,7 +15,8 @@ public interface TrainerService {
     TrainerDTO createTrainer(TrainerDTO trainer) throws TrainerAlreadyExistsException;
     TrainerDTO updateTrainer(Long id , TrainerDTO trainer) throws TrainerNotFoundException, TrainerAlreadyExistsException;
     boolean deleteTrainer(Long id);
-
     TrainerDTO applyAsTrainer(TrainerRequestDTO trainerRequestDTO) throws TrainerAlreadyExistsException;
+    TrainerDTO acceptTrainer(Long trainerId) throws TrainerNotFoundException, TrainerAlreadyExistsException;
+    boolean refuseTrainer(Long trainerId) throws TrainerNotFoundException, TrainerAlreadyExistsException;
 
 }

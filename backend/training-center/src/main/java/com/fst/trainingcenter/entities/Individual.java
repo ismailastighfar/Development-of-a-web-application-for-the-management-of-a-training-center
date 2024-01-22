@@ -1,16 +1,17 @@
 package com.fst.trainingcenter.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fst.trainingcenter.security.entities.AppUser;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("IND")
@@ -18,4 +19,11 @@ import java.util.Date;
 public class Individual extends AppUser {
    @DateTimeFormat(pattern = "yyyy-MM-dd")
    private LocalDate dateOfBirth;
+   @ManyToMany(fetch = FetchType.LAZY)
+   @JoinTable(name = "Enrollment")
+   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+   private List<Training> trainings;
+   @OneToMany(mappedBy = "individual",fetch = FetchType.LAZY)
+   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+   private List<Evaluation> evaluations = new ArrayList<>();
 }

@@ -14,10 +14,12 @@ import com.fst.trainingcenter.services.TrainerService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class TrainerServiceImpl implements TrainerService {
 
@@ -107,5 +109,37 @@ public class TrainerServiceImpl implements TrainerService {
         trainer.setDescription(trainerRequestDTO.getDescription());
         Trainer trainersaved = trainerRepository.save(trainer);
         return  mappers.fromTrainer(trainersaved);
+    }
+
+    @Override
+    public TrainerDTO acceptTrainer(Long trainerId) throws TrainerNotFoundException, TrainerAlreadyExistsException {
+        Trainer trainer = trainerRepository.findById(trainerId).orElseThrow(
+                () -> new TrainerNotFoundException("trainer with id "+ trainerId + " not found")
+        );
+        if (trainer.isAccepted())
+            throw new TrainerAlreadyExistsException("trainer with id " + trainer.getId() + " already accepted");
+          trainer.setAccepted(true);
+          String password = generateUniquePassword();
+          trainer.setPassword(password);
+          AppRole role = securityService.findRoleByRoleName("TRAINER");
+          securityService.addRoleToUser(role.getRoleName(),trainer.getEmail());
+          return mappers.fromTrainer(trainer);
+    }
+
+    @Override
+    public boolean refuseTrainer(Long trainerId) throws TrainerNotFoundException, TrainerAlreadyExistsException {
+        Trainer trainer = trainerRepository.findById(trainerId).orElseThrow(
+                () -> new TrainerNotFoundException("trainer with id : " +  trainerId + " not found")
+        );
+        if (trainer.isAccepted())
+            throw new TrainerAlreadyExistsException("trainer with id : " + trainer.getId() + " already accepted");
+        return deleteTrainer(trainer.getId());
+    }
+
+
+    public  String generateUniquePassword() {
+        long currentTimeMillis = System.currentTimeMillis();
+        String password = String.valueOf(currentTimeMillis);
+        return password;
     }
 }

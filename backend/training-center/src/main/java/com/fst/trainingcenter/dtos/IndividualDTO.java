@@ -2,10 +2,8 @@ package com.fst.trainingcenter.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 public class IndividualDTO {
