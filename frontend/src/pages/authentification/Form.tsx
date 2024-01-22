@@ -1,6 +1,25 @@
+import { ChangeEvent, useState } from "react";
+interface formData {
+    name?: string;
+    surname?: string;
+}
+
 const Form = ({ option }: { option: number }) => {
+    const [formData, setFormData] = useState<formData>({
+        name: "",
+        surname: "",
+    });
+    // Handle form field changes
+    const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+    const handleSubmit = () => {};
     return (
-        <form className="login-form" onSubmit={(evt) => evt.preventDefault()}>
+        <form className="login-form" onSubmit={handleSubmit}>
             <div
                 className={
                     "login-form-fields " +
@@ -14,6 +33,8 @@ const Form = ({ option }: { option: number }) => {
                         name="name"
                         type="text"
                         placeholder="Name"
+                        value={formData?.name}
+                        onChange={handleFormChange}
                         required={option === 2}
                         disabled={option === 1}
                     />
@@ -25,6 +46,8 @@ const Form = ({ option }: { option: number }) => {
                         name="surname"
                         type="text"
                         placeholder="Surname"
+                        value={formData?.surname}
+                        onChange={handleFormChange}
                         required={option === 2}
                         disabled={option === 1}
                     />
