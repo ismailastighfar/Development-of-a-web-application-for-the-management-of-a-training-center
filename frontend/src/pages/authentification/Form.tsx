@@ -74,6 +74,7 @@ const Form = ({ option }: { option: number }) => {
                         type="email"
                         placeholder="E-mail"
                         required
+                        autoComplete="email"
                     />
                 </div>
                 <div className="form-group sign-up-input">
@@ -95,6 +96,7 @@ const Form = ({ option }: { option: number }) => {
                         type="password"
                         placeholder="Password"
                         required
+                        autoComplete="new-password"
                     />
                 </div>
                 <div className="form-group sign-up-input">
@@ -106,6 +108,7 @@ const Form = ({ option }: { option: number }) => {
                         placeholder="Repeat password"
                         required={option === 2}
                         disabled={option === 1}
+                        autoComplete="new-password"
                     />
                 </div>
             </div>
