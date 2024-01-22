@@ -1,20 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/public/Home";
 import Authentificate from "./pages/authentification/Authentificate";
-import { useAuth } from "./context/UserContext";
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Home />,
+    },
+    {
+        path: "auth",
+        element: <Authentificate />,
+    },
+]);
 function App() {
-    const { user } = useAuth();
-    return (
-        <Router>
-            <Routes>
-                <Route path="/auth" element={<Authentificate />} />
-                <Route
-                    path="/"
-                    element={user ? <Home /> : <Authentificate />}
-                />
-            </Routes>
-        </Router>
-    );
+    return <RouterProvider router={router} />;
 }
 
 export default App;

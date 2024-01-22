@@ -1,12 +1,16 @@
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/UserContext";
+import { useEffect } from "react";
 
 function Home() {
     const { user } = useAuth();
-    if (user === undefined) {
-        redirect("/auth");
-    }
-    console.log(user);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/auth");
+        }
+    }, []);
     return <div>Welcome to homepage!</div>;
 }
 
