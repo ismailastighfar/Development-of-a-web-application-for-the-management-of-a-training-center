@@ -1,0 +1,33 @@
+input {
+    border: 0;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    color: $color-dark-1;
+    border-radius: 8px;
+    height: 45px;
+    width: 100%;
+    transition: all 0.4s ease;
+
+    &::placeholder {
+        color: $color-dark-2;
+    }
+    &::-webkit-input-placeholder {
+        color: $color-dark-2;
+    }
+    &:-ms-input-placeholder {
+        color: $color-dark-2;
+    }
+    &:hover {
+        outline: 1px solid $color-primary;
+    }
+    &:focus {
+        outline: 2px solid $color-primary;
+    }
+}
+label {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 3px;
+    color: $color-primary;
+}

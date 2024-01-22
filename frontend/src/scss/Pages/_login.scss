@@ -1,0 +1,110 @@
+.login {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, $color-light, $color-primary);
+}
+.login-card {
+    text-align: center;
+    color: $color-dark-1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 100%;
+    max-width: 600px;
+    background-color: $color-light;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+        rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    overflow: hidden;
+    animation: slideBottom 1.5s;
+
+    > header {
+        position: relative;
+        height: 34px;
+        overflow: hidden;
+        text-align: center;
+    }
+}
+.login-headings {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    font-size: 28px;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+    > span {
+        margin: 3px 0;
+    }
+    &.sign-in {
+        transform: translateY(0);
+    }
+    &.sign-up {
+        transform: translateY(-36px);
+    }
+}
+.options {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    > li {
+        cursor: pointer;
+        padding: 10px 20px;
+        text-align: center;
+        transition: all 0.2s ease;
+        list-style: none;
+        flex: 1;
+        font-size: 18px;
+        background-color: $color-white;
+
+        &:hover {
+            opacity: 1;
+            background-color: $color-primary;
+            filter: brightness(1.2);
+        }
+        &.active {
+            opacity: 1;
+            background-color: $color-primary;
+            color: $color-light;
+        }
+    }
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    padding: 0 5vw;
+    margin: 30px 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+.login-form-fields {
+    .form-group {
+        height: 80px;
+        transition: all 0.4s ease;
+    }
+    &.sign-in {
+        .sign-up-input {
+            height: 0;
+            overflow: hidden;
+            input {
+                transition: all 0.4s ease;
+                height: 0;
+                padding: 0;
+                margin: 0;
+            }
+            label {
+                font-size: 0;
+            }
+        }
+    }
+}
+@keyframes slideBottom {
+    from {
+        transform: translateY(-100vh);
+    }
+}
