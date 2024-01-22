@@ -1,0 +1,26 @@
+.btn {
+    border: 2px solid $color-primary;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    padding: 15px 0;
+    border-radius: 8px;
+    color: $color-primary;
+    background-color: $color-white;
+    font-size: 16px;
+    height: 45px;
+    transition: all 0.2s ease;
+    &.btn-primary {
+        background-color: $color-primary;
+        color: $color-white;
+    }
+    &:hover {
+        filter: brightness(1.2);
+    }
+    &:active,
+    &:focus {
+        outline: none;
+        filter: brightness(1.2);
+    }
+}
