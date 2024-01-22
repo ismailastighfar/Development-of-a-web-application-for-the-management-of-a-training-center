@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+import { createUser } from "../../hooks/UseAPI";
 interface formData {
     name?: string;
     surname?: string;
@@ -17,7 +18,9 @@ const Form = ({ option }: { option: number }) => {
             [name]: value,
         }));
     };
-    const handleSubmit = () => {};
+    const handleSubmit = () => {
+        createUser(formData);
+    };
     return (
         <form className="login-form" onSubmit={handleSubmit}>
             <div
