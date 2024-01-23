@@ -103,8 +103,8 @@ public class TrainingServiceImpl implements TrainingService {
             throw new IndividualAlreadyEnrolledException("Individual with id: " + idIndividual + " is already enrolled in training with id: " + idTraining);
         }
 
-            training.getIndividuals().add(individual);
-            individual.getTrainings().add(training);
+            //training.getIndividuals().add(individual);
+            //individual.getTrainings().add(training);
             training.setAvailableSeats(training.getAvailableSeats()-1);
 
         return mappers.fromTraining(training);

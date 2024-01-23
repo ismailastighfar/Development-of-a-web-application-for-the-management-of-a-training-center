@@ -19,10 +19,10 @@ public class Trainer extends AppUser {
     private String keywords; // skills
     private String description;
     private boolean isAccepted;
-    @OneToMany(mappedBy = "trainer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trainer",fetch = FetchType.EAGER)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Training> trainings = new ArrayList<>();
-    @OneToMany(mappedBy = "trainer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trainer",fetch = FetchType.EAGER)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Evaluation> evaluations = new ArrayList<>();
 }
