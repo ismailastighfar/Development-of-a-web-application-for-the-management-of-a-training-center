@@ -19,11 +19,11 @@ import java.util.List;
 public class Individual extends AppUser {
    @DateTimeFormat(pattern = "yyyy-MM-dd")
    private LocalDate dateOfBirth;
-   @ManyToMany(fetch = FetchType.LAZY)
+   @ManyToMany(fetch = FetchType.EAGER)
    @JoinTable(name = "Enrollment")
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    private List<Training> trainings;
-   @OneToMany(mappedBy = "individual",fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "individual",fetch = FetchType.EAGER)
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    private List<Evaluation> evaluations = new ArrayList<>();
 }
