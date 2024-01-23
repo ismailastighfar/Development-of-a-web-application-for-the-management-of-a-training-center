@@ -1,7 +1,4 @@
 import API from "../API"
-import { useNavigate } from "react-router-dom";
-
-
 export interface UserData {
     nom?: string;
     surname?: string;
@@ -25,7 +22,7 @@ export const createUser = (userData: UserData) => {
       .catch((error) => {
 
         const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
-         throw new Error(errorMessage);        
+        throw new Error(errorMessage);        
       });
 
 }
@@ -56,12 +53,7 @@ export const logIn = (userData: UserData) => {
       saveAuthToken('refreshToken', authResponse['refresh-token']);
       saveAuthToken('accessToken', authResponse['access-token']);
       saveAuthToken('userId', authResponse.id);
-      
-      const user={
-        "id": res.data.id,
-        "username": userData.nom,
-        "email": userData.email
-      }
+
       return res;
     })
     .catch((error) => {
