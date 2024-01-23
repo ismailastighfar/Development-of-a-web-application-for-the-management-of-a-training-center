@@ -1,4 +1,6 @@
 import API from "../API"
+import { useNavigate } from "react-router-dom";
+
 
 export interface UserData {
     nom?: string;
@@ -14,10 +16,12 @@ const headers = {
     'Content-Type': 'application/json', // Example header, adjust as needed
   };
 
+
+
 export const createUser = (userData: UserData) => {
     // Send the `userData` directly, not as { userData: userData }
     return API.post("/individuals", userData , {headers})
-      .then((res) => res.data)
+      .then((res) => res)
       .catch((error) => {
 
         const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
@@ -26,7 +30,18 @@ export const createUser = (userData: UserData) => {
 
 }
 
+interface AuthResponse {
+  'refresh-token': string;
+  'access-token': string;
+  id: string;
+}
+
 export const logIn = (userData: UserData) => {
+
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
 
     const loginData = {
         "email":userData.email,
@@ -34,14 +49,28 @@ export const logIn = (userData: UserData) => {
     }
 
     return API.post("/login", loginData , {headers})
+    .then((res) => {
 
-    .then((res) => res.data)
+      const authResponse: AuthResponse = res.data;
 
+      saveAuthToken('refreshToken', authResponse['refresh-token']);
+      saveAuthToken('accessToken', authResponse['access-token']);
+      saveAuthToken('userId', authResponse.id);
+      
+      const user={
+        "id": res.data.id,
+        "username": userData.nom,
+        "email": userData.email
+      }
+      return res;
+    })
     .catch((error) => {
-
       const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
-       throw new Error(errorMessage);        
+      throw new Error(errorMessage);        
     });
-
-
 }
+
+// Helper function to save the authentication token to localStorage
+const saveAuthToken = (key: string, token: string) => {
+  localStorage.setItem(key, token);
+};

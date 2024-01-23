@@ -4,6 +4,10 @@ import Form from "./Form";
 const Authentificate = () => {
     const [option, setOption] = useState<number>(1);
 
+    const handleOptionChange = (newOption: number) => {
+        setOption(newOption);
+    };
+
     return (
         <div className="login">
             <div className="login-card">
@@ -32,7 +36,7 @@ const Authentificate = () => {
                         <span>Create an account</span>
                     </h1>
                 </header>
-                <Form option={option} />
+                <Form option={option} onOptionChange={handleOptionChange}/>
             </div>
         </div>
     );

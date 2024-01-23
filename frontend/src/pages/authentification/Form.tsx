@@ -3,18 +3,21 @@ import { UserData,createUser,logIn } from "../../hooks/UseAPI";
 import { useNavigate } from "react-router-dom";
 
 
-const Form = ({ option }: { option: number }) => {
+
+const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newOption: number) => void;}) => {
 
     const navigate = useNavigate();
 
-    const [formData, setFormData] = useState<UserData>({
+    const initialFormData: UserData = {
         nom: '',
         surname: '',
         phone: '',
         password: '',
         email: '',
-        dateOfBirth:'',
-    })
+        dateOfBirth: '',
+    };
+
+    const [formData, setFormData] = useState<UserData>(initialFormData)
 
     const [repeatPassword, setRepeatPassword] = useState<string>('');
     
@@ -33,9 +36,18 @@ const Form = ({ option }: { option: number }) => {
 
         if(option === 2){
             try {
+                //validate the password before the saving 
+                if(formData.password != repeatPassword){
+                    alert("Please enter the same password");
+                    return
+                }
                 const response = await createUser(formData);          
                 if (response.status === 201 || response.status === 200) {
-                  alert("User created successfully!");
+                    // Add a message bofore doing something else
+                     alert("User created successfully!, please sign in to your account"); 
+                    // Clear the form data after successful registration
+                    setFormData(initialFormData);
+                    onOptionChange(1);
                 } 
                 else { 
                     alert("Failed to create user. Please try again."); 
@@ -47,8 +59,10 @@ const Form = ({ option }: { option: number }) => {
         }
         else{
             try {
-                const response = await logIn(formData);          
-                if (response.status === 201 || response.status === 200) {
+                const response = await logIn(formData);  
+                console.log("Status is "+response.status)        
+                if (response.status === 200) {
+                    //Show some message before moving to other page
                     navigate("/")
                 }
               } 
@@ -151,7 +165,7 @@ const Form = ({ option }: { option: number }) => {
                     <label htmlFor="dob">Date of birth</label>
                     <input
                         id="dob"
-                        name="dob"
+                        name="dateOfBirth"
                         type="date"
                         placeholder="Date of birth"
                         value={formData?.dateOfBirth}
