@@ -1,26 +1,65 @@
-import { ChangeEvent, useState } from "react";
-import { createUser } from "../../hooks/UseAPI";
-interface formData {
-    name?: string;
-    surname?: string;
-}
+import { ChangeEvent,FormEvent ,useState } from "react";
+import { UserData,createUser,logIn } from "../../hooks/UseAPI";
+import { useNavigate } from "react-router-dom";
+
 
 const Form = ({ option }: { option: number }) => {
-    const [formData, setFormData] = useState<formData>({
-        name: "",
-        surname: "",
-    });
+
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState<UserData>({
+        nom: '',
+        surname: '',
+        phone: '',
+        password: '',
+        email: '',
+        dateOfBirth:'',
+    })
+
+    const [repeatPassword, setRepeatPassword] = useState<string>('');
+    
     // Handle form field changes
     const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
     };
-    const handleSubmit = () => {
-        createUser(formData);
-    };
+
+    const handleSubmit = async (event: FormEvent) => {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        if(option === 2){
+            try {
+                const response = await createUser(formData);          
+                if (response.status === 201 || response.status === 200) {
+                  alert("User created successfully!");
+                } 
+                else { 
+                    alert("Failed to create user. Please try again."); 
+                }
+              } 
+            catch (error) {
+                alert(error);
+              }
+        }
+        else{
+            try {
+                const response = await logIn(formData);          
+                if (response.status === 201 || response.status === 200) {
+                    navigate("/")
+                }
+              } 
+            catch (error) {
+                alert(error);
+              }
+        }
+    }
+       
+
+
     return (
         <form className="login-form" onSubmit={handleSubmit}>
             <div
@@ -33,10 +72,10 @@ const Form = ({ option }: { option: number }) => {
                     <label htmlFor="name">Name</label>
                     <input
                         id="name"
-                        name="name"
+                        name="nom"
                         type="text"
                         placeholder="Name"
-                        value={formData?.name}
+                        value={formData?.nom}
                         onChange={handleFormChange}
                         required={option === 2}
                         disabled={option === 1}
@@ -55,17 +94,6 @@ const Form = ({ option }: { option: number }) => {
                         disabled={option === 1}
                     />
                 </div>
-                <div className="form-group sign-up-input">
-                    <label htmlFor="city">City</label>
-                    <input
-                        id="city"
-                        name="city"
-                        type="text"
-                        placeholder="City"
-                        required={option === 2}
-                        disabled={option === 1}
-                    />
-                </div>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input
@@ -73,6 +101,8 @@ const Form = ({ option }: { option: number }) => {
                         name="email"
                         type="email"
                         placeholder="E-mail"
+                        value={formData?.email}
+                        onChange={handleFormChange}
                         required
                         autoComplete="email"
                     />
@@ -83,7 +113,9 @@ const Form = ({ option }: { option: number }) => {
                         id="phone"
                         name="phone"
                         type="number"
+                        value={formData?.phone}
                         placeholder="Phone"
+                        onChange={handleFormChange}
                         required={option === 2}
                         disabled={option === 1}
                     />
@@ -94,7 +126,9 @@ const Form = ({ option }: { option: number }) => {
                         id="password"
                         name="password"
                         type="password"
+                        value={formData?.password}
                         placeholder="Password"
+                        onChange={handleFormChange}
                         required
                         autoComplete="new-password"
                     />
@@ -105,11 +139,26 @@ const Form = ({ option }: { option: number }) => {
                         id="repeat-password"
                         name="repeat-password"
                         type="password"
+                        value={repeatPassword}
+                        onChange={(e) => setRepeatPassword(e.target.value)}
                         placeholder="Repeat password"
                         required={option === 2}
                         disabled={option === 1}
                         autoComplete="new-password"
                     />
+                </div>
+                <div className="form-group sign-up-input">
+                    <label htmlFor="dob">Date of birth</label>
+                    <input
+                        id="dob"
+                        name="dob"
+                        type="date"
+                        placeholder="Date of birth"
+                        value={formData?.dateOfBirth}
+                        onChange={handleFormChange}
+                        required={option === 2}
+                        disabled={option === 1}
+                        />
                 </div>
             </div>
             <button className="btn btn-primary" type="submit">
