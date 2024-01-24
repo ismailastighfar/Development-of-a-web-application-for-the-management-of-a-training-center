@@ -1,6 +1,9 @@
 import API from "../API"
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> e53dc72ab49fc806b98e17205980e4e19465c970
 export interface UserData {
     nom?: string;
     surname?: string;
@@ -24,7 +27,7 @@ export const createUser = (userData: UserData) => {
       .then((res) => res)
       .catch((error) => {
         const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
-         throw new Error(errorMessage);        
+        throw new Error(errorMessage);        
       });
 
 }
@@ -58,7 +61,11 @@ export const logIn = (userData: UserData) => {
       saveAuthToken('refreshToken', authResponse['refresh-token']);
       saveAuthToken('accessToken', authResponse['access-token']);
       saveAuthToken('userId', authResponse.id);
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> e53dc72ab49fc806b98e17205980e4e19465c970
       return res;
     })
     .catch((error) => {
