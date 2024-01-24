@@ -1,16 +1,19 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/public/Home";
+import { routesData } from "./pages/Routes";
 import Authentificate from "./pages/authentification/Authentificate";
+import LayoutSide from "./layouts/LayoutSide";
+
 const router = createBrowserRouter([
     {
-        path: "/",
-        element: <Home />,
+        element: <LayoutSide />,
+        children: routesData.map(({ path, element }) => ({ path, element })),
     },
     {
-        path: "auth",
+        path: "/auth",
         element: <Authentificate />,
     },
 ]);
+
 function App() {
     return <RouterProvider router={router} />;
 }

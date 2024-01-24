@@ -1,0 +1,14 @@
+@import "sidemenu";
+.layout {
+    position: relative;
+    min-height: 100vh;
+    .main-content {
+        margin-left: $sidemenu-size;
+        padding: 30px;
+        h1 {
+            font-weight: 700;
+            color: $color-primary;
+            margin-bottom: 20px;
+        }
+    }
+}
