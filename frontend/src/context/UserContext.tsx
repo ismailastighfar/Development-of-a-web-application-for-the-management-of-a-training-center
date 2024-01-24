@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, FC } from "react";
-import { UserData } from "../hooks/UseAPI";
+import { UserData } from "../hooks/UserAPI";
 
 interface AuthContextProps {
     user: UserData | null;

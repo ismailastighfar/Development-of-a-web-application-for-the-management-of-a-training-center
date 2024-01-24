@@ -1,81 +1,80 @@
-import { ChangeEvent,FormEvent ,useState } from "react";
-import { UserData,createUser,logIn } from "../../hooks/UseAPI";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { UserData, createUser, logIn } from "../../hooks/UserAPI";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/UserContext";
 
-
-
-const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newOption: number) => void;}) => {
-
+const Form = ({
+    option,
+    onOptionChange,
+}: {
+    option: number;
+    onOptionChange: (newOption: number) => void;
+}) => {
     const navigate = useNavigate();
-    const {login} = useAuth();
+    const { login } = useAuth();
 
     const initialFormData: UserData = {
-        nom: '',
-        surname: '',
-        phone: '',
-        password: '',
-        email: '',
-        dateOfBirth: '',
+        nom: "",
+        surname: "",
+        phone: "",
+        password: "",
+        email: "",
+        dateOfBirth: "",
     };
 
-    const [formData, setFormData] = useState<UserData>(initialFormData)
+    const [formData, setFormData] = useState<UserData>(initialFormData);
 
-    const [repeatPassword, setRepeatPassword] = useState<string>('');
-    
+    const [repeatPassword, setRepeatPassword] = useState<string>("");
+
     // Handle form field changes
     const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
 
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault(); // Prevent the default form submission behavior
 
-        if(option === 2){
+        if (option === 2) {
             try {
-                //validate the password before the saving 
-                if(formData.password != repeatPassword){
+                //validate the password before the saving
+                if (formData.password != repeatPassword) {
                     alert("Please enter the same password");
-                    return
+                    return;
                 }
-                const response = await createUser(formData);          
+                const response = await createUser(formData);
                 if (response.status === 201 || response.status === 200) {
                     // Add a message bofore doing something else
-                     alert("User created successfully!, please sign in to your account"); 
+                    alert(
+                        "User created successfully!, please sign in to your account"
+                    );
                     // Clear the form data after successful registration
                     setFormData(initialFormData);
                     onOptionChange(1);
-                } 
-                else { 
-                    alert("Failed to create user. Please try again."); 
+                } else {
+                    alert("Failed to create user. Please try again.");
                 }
-              } 
-            catch (error) {
+            } catch (error) {
                 alert(error);
-              }
-        }
-        else{
+            }
+        } else {
             try {
-                const response = await logIn(formData);  
-                console.log("Status is "+response.status)        
+                const response = await logIn(formData);
+                console.log("Status is " + response.status);
                 if (response.status === 200) {
-                    login(formData)
+                    login(formData);
                     //Show some message before moving to other page
-                    navigate("/")
+                    navigate("/");
                 }
-              } 
-            catch (error) {
+            } catch (error) {
                 alert(error);
-              }
+            }
         }
-    }
-       
-
+    };
 
     return (
         <form className="login-form" onSubmit={handleSubmit}>
@@ -175,9 +174,9 @@ const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newO
                         onChange={handleFormChange}
                         required={option === 2}
                         disabled={false}
-                        />
+                    />
                 </div>
-            </div>  
+            </div>
             <button className="btn btn-primary" type="submit">
                 {option === 1 ? "Sign in" : "Sign up"}
             </button>
