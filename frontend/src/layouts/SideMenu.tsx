@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { routesData } from "../pages/Routes";
 import logo from "../assets/Logo.png";
+import BecomeTrainer from "../components/BecomeTrainer";
 
 const SideMenu = () => {
     return (
@@ -25,6 +26,7 @@ const SideMenu = () => {
                     );
                 })}
             </div>
+            <BecomeTrainer />
         </div>
     );
 };

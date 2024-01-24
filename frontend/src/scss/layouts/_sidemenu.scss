@@ -11,24 +11,29 @@
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
     .app-logo {
     }
-    .nav-items a {
-        display: flex;
-        align-items: center;
-        padding: 12px 30px;
-        border-radius: 13px;
-        font-size: 16px;
-        text-decoration: none;
-        font-weight: 700;
-        color: $color-dark-1;
-        width: 100%;
-        margin-bottom: 15px;
-        transition: all 0.3s ease;
-        &:hover {
-            background-color: $color-light;
-        }
-        &.active {
-            background-color: $color-primary;
-            color: $color-white;
+    .nav-items {
+        flex: 1;
+        a {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            border-radius: 13px;
+            font-size: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            line-height: 1;
+            color: $color-dark-1;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            &:hover {
+                background-color: $color-light;
+            }
+            &.active {
+                background-color: $color-primary;
+                color: $color-white;
+                cursor: default;
+            }
         }
     }
 }

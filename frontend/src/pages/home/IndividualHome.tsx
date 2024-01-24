@@ -1,19 +1,5 @@
 const IndividualHome = () => {
-    const handleBecomeTrainerClick = () => {
-        console.log("become clicked :)");
-    };
-
-    return (
-        <div>
-            <button
-                className="btn btn-primary"
-                type="button"
-                onClick={handleBecomeTrainerClick}
-            >
-                Become a trainer
-            </button>
-        </div>
-    );
+    return <div>Individual</div>;
 };
 
 export default IndividualHome;
