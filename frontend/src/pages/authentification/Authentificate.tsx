@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Form from "./Form";
+import  SignupTrainer from "./SignupTrainer"
 
 const Authentificate = () => {
     const [option, setOption] = useState<number>(1);
@@ -24,6 +25,12 @@ const Authentificate = () => {
                     >
                         Sign up
                     </li>
+                    <li
+                        className={option === 3 ? "active" : ""}
+                        onClick={() => setOption(3)}
+                    >
+                        Sign up as Trainer
+                    </li>
                 </ul>
                 <header>
                     <h1
@@ -33,10 +40,16 @@ const Authentificate = () => {
                         }
                     >
                         <span>Sign in to your account</span>
-                        <span>Create an account</span>
+                        <span>Create account {option === 3 ? "as Trainer" : ""}</span>
                     </h1>
                 </header>
-                <Form option={option} onOptionChange={handleOptionChange}/>
+               
+                {option === 1 || option === 2 ? (
+                    <Form option={option} onOptionChange={handleOptionChange} />
+                ) : (
+                    <SignupTrainer onOptionChange={handleOptionChange} />
+                )}
+                
             </div>
         </div>
     );

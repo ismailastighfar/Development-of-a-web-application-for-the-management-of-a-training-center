@@ -1,5 +1,4 @@
 import API from "../API"
-import { useNavigate } from "react-router-dom";
 
 
 export interface UserData {
@@ -12,23 +11,26 @@ export interface UserData {
 
 }
 
+//General Header
 const headers = {
     'Content-Type': 'application/json', // Example header, adjust as needed
   };
 
 
-
+//create user Request
 export const createUser = (userData: UserData) => {
     // Send the `userData` directly, not as { userData: userData }
     return API.post("/individuals", userData , {headers})
       .then((res) => res)
       .catch((error) => {
-
         const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
          throw new Error(errorMessage);        
       });
 
 }
+
+
+//Login Request
 
 interface AuthResponse {
   'refresh-token': string;
@@ -57,11 +59,6 @@ export const logIn = (userData: UserData) => {
       saveAuthToken('accessToken', authResponse['access-token']);
       saveAuthToken('userId', authResponse.id);
       
-      const user={
-        "id": res.data.id,
-        "username": userData.nom,
-        "email": userData.email
-      }
       return res;
     })
     .catch((error) => {
@@ -70,7 +67,14 @@ export const logIn = (userData: UserData) => {
     });
 }
 
+//Become a Trainer Request : 
+
+export const BecomeTainer = () => {
+
+}
+
 // Helper function to save the authentication token to localStorage
 const saveAuthToken = (key: string, token: string) => {
   localStorage.setItem(key, token);
 };
+

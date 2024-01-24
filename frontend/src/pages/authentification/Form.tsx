@@ -1,12 +1,14 @@
 import { ChangeEvent,FormEvent ,useState } from "react";
 import { UserData,createUser,logIn } from "../../hooks/UseAPI";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/UserContext";
 
 
 
 const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newOption: number) => void;}) => {
 
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     const initialFormData: UserData = {
         nom: '',
@@ -62,6 +64,7 @@ const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newO
                 const response = await logIn(formData);  
                 console.log("Status is "+response.status)        
                 if (response.status === 200) {
+                    login(formData)
                     //Show some message before moving to other page
                     navigate("/")
                 }
@@ -92,7 +95,7 @@ const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newO
                         value={formData?.nom}
                         onChange={handleFormChange}
                         required={option === 2}
-                        disabled={option === 1}
+                        disabled={false}
                     />
                 </div>
                 <div className="form-group sign-up-input">
@@ -105,7 +108,7 @@ const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newO
                         value={formData?.surname}
                         onChange={handleFormChange}
                         required={option === 2}
-                        disabled={option === 1}
+                        disabled={false}
                     />
                 </div>
                 <div className="form-group">
@@ -131,7 +134,7 @@ const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newO
                         placeholder="Phone"
                         onChange={handleFormChange}
                         required={option === 2}
-                        disabled={option === 1}
+                        disabled={false}
                     />
                 </div>
                 <div className="form-group">
@@ -157,7 +160,7 @@ const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newO
                         onChange={(e) => setRepeatPassword(e.target.value)}
                         placeholder="Repeat password"
                         required={option === 2}
-                        disabled={option === 1}
+                        disabled={false}
                         autoComplete="new-password"
                     />
                 </div>
@@ -171,10 +174,10 @@ const Form = ({ option , onOptionChange}: { option: number,onOptionChange: (newO
                         value={formData?.dateOfBirth}
                         onChange={handleFormChange}
                         required={option === 2}
-                        disabled={option === 1}
+                        disabled={false}
                         />
                 </div>
-            </div>
+            </div>  
             <button className="btn btn-primary" type="submit">
                 {option === 1 ? "Sign in" : "Sign up"}
             </button>

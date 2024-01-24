@@ -4,7 +4,11 @@ import { useEffect } from "react";
 
 function Home() {
     
-    return <div>Welcome to homepage! </div>;
+    return (
+        <div>
+            <div>Welcome to homepage! </div>
+        </div>
+    );
 }
 
 export default Home;
