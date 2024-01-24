@@ -1,5 +1,5 @@
+import Formations from "./formations/Formations";
 import Home from "./home/Home";
-import Formations from "./Formations/Formations";
 
 export const routesData = [
     {

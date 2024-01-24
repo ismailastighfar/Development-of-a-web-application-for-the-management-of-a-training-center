@@ -12,10 +12,11 @@
     .app-logo {
     }
     .nav-items a {
-        display: block;
-        padding: 15px 30px;
+        display: flex;
+        align-items: center;
+        padding: 12px 30px;
         border-radius: 13px;
-        font-size: 18px;
+        font-size: 16px;
         text-decoration: none;
         font-weight: 700;
         color: $color-dark-1;
