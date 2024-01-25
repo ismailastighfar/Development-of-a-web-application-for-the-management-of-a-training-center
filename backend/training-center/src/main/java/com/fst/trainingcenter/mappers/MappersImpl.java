@@ -3,6 +3,7 @@ package com.fst.trainingcenter.mappers;
 
 import com.fst.trainingcenter.dtos.*;
 import com.fst.trainingcenter.entities.*;
+import com.fst.trainingcenter.security.entities.AppUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,17 @@ public class MappersImpl {
         Trainer trainer = new Trainer();
         BeanUtils.copyProperties(trainerDTO,trainer);
         return  trainer;
+    }
+
+    public AssistantDTO fromAssistant(AppUser assistant){
+        AssistantDTO assistantDTO = new AssistantDTO();
+        BeanUtils.copyProperties(assistant,assistantDTO);
+        return  assistantDTO;
+    }
+    public AppUser fromAssistantDTO(AssistantDTO assistantDTO){
+        AppUser user = new AppUser();
+        BeanUtils.copyProperties(assistantDTO,user);
+        return  user;
     }
 
     public TrainingSessionDTO fromTrainingSession(TrainingSession trainingSession){

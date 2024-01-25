@@ -2,7 +2,10 @@ package com.fst.trainingcenter.services.impl;
 
 import com.fst.trainingcenter.dtos.TrainerDTO;
 import com.fst.trainingcenter.dtos.TrainerRequestDTO;
+import com.fst.trainingcenter.dtos.TrainingDTO;
+import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
+import com.fst.trainingcenter.entities.Training;
 import com.fst.trainingcenter.exceptions.TrainerAlreadyExistsException;
 import com.fst.trainingcenter.exceptions.TrainerNotFoundException;
 import com.fst.trainingcenter.mappers.MappersImpl;
@@ -11,12 +14,17 @@ import com.fst.trainingcenter.security.entities.AppRole;
 import com.fst.trainingcenter.security.entities.AppUser;
 import com.fst.trainingcenter.security.services.ISecurityService;
 import com.fst.trainingcenter.services.TrainerService;
+import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -45,12 +53,56 @@ public class TrainerServiceImpl implements TrainerService {
         return mappers.fromTrainer(trainer);
     }
 
+    public List<TrainingDTO> getTrainingsForTrainer(Long trainerId) throws TrainerNotFoundException {
+        Trainer trainer = trainerRepository.findById(trainerId)
+                .orElseThrow(() -> new TrainerNotFoundException("Trainer not found with id: " + trainerId));
+
+        List<Training> trainings = trainer.getTrainings();
+
+        return trainings.stream()
+                .map(training -> mappers.fromTraining(training))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Page<TrainerDTO> searchTrainers(String name, String email, String keywords, Pageable pageable) {
+        Page<Trainer> trainerPage = trainerRepository.findAll((root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (name != null && !name.isEmpty()) {
+                predicates.add(builder.like(root.get("name"), "%" + name + "%"));
+            }
+
+            if (email != null && !email.isEmpty()) {
+                predicates.add(builder.like(root.get("email"), "%" + email + "%"));
+            }
+
+            if (keywords != null && !keywords.isEmpty()) {
+                predicates.add(builder.like(root.get("keywords"), "%" + keywords + "%"));
+            }
+
+            return builder.and(predicates.toArray(new Predicate[0]));
+        }, pageable);
+
+        return trainerPage.map(trainer -> mappers.fromTrainer(trainer));
+    }
+
+    @Override
+    public List<TrainerDTO> getTrainerByAccepted(boolean accepted) {
+        List<Trainer> trainers = trainerRepository.findByIsAccepted(accepted);
+        List<TrainerDTO> trainerDTO = trainers.stream().
+                map(trainer -> mappers.fromTrainer(trainer)).
+                toList();
+        return trainerDTO;
+    }
+
     @Override
     public TrainerDTO createTrainer(TrainerDTO trainerDTO) throws TrainerAlreadyExistsException {
         Trainer trainer = mappers.fromTrainerDTO(trainerDTO);
         AppUser user = securityService.findUserByEmail(trainer.getEmail());
         if (user != null)
-          throw new TrainerAlreadyExistsException("Trainer  With Id = `"+trainer.getId()+ "` Already Exists!");
+          throw new TrainerAlreadyExistsException("Trainer  With Id = `"+user.getId()+ "` Already Exists!");
         Trainer newTrainer = new Trainer();
         newTrainer.setNom(trainer.getNom());
         newTrainer.setSurname(trainer.getSurname());

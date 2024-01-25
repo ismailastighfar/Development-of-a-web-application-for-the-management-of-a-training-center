@@ -5,6 +5,7 @@ import com.fst.trainingcenter.entities.Company;
 import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
 import com.fst.trainingcenter.entities.Training;
+import com.fst.trainingcenter.enums.Category;
 import com.fst.trainingcenter.exceptions.*;
 import com.fst.trainingcenter.mappers.MappersImpl;
 import com.fst.trainingcenter.repositories.CompanyRepository;
@@ -51,6 +52,15 @@ public class TrainingServiceImpl implements TrainingService {
                 () -> new TrainingNotFoundException("training not found id : " + id)
         );
         return mappers.fromTraining(training) ;
+    }
+
+    @Override
+    public List<TrainingDTO> getTrainingsByIsCompany(boolean isCompany) {
+        List<Training> trainings = trainingRepository.findByIsForCompany(isCompany);
+        List<TrainingDTO> trainingDTOS = trainings.stream().
+                map(training -> mappers.fromTraining(training)).
+                toList();
+        return  trainingDTOS;
     }
 
     @Override
@@ -103,8 +113,8 @@ public class TrainingServiceImpl implements TrainingService {
             throw new IndividualAlreadyEnrolledException("Individual with id: " + idIndividual + " is already enrolled in training with id: " + idTraining);
         }
 
-            //training.getIndividuals().add(individual);
-            //individual.getTrainings().add(training);
+            training.getIndividuals().add(individual);
+            individual.getTrainings().add(training);
             training.setAvailableSeats(training.getAvailableSeats()-1);
 
         return mappers.fromTraining(training);
@@ -133,21 +143,21 @@ public class TrainingServiceImpl implements TrainingService {
         return mappers.fromTraining(training);
     }
 
-    public Page<TrainingDTO> searchTrainings(String category, String city, String startDate, Pageable pageable) {
+    public Page<TrainingDTO> searchTrainings(Category category, String city, String startDate, Pageable pageable) {
         Page<Training> trainingPage = trainingRepository.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (category != null && !category.isEmpty()) {
-                predicates.add(builder.equal(root.get("category"), category));
+            if (category != null) {
+                predicates.add(builder.like(root.get("category"), "%" + category + "%"));
             }
 
             if (city != null && !city.isEmpty()) {
-                predicates.add(builder.equal(root.get("city"), city));
+                predicates.add(builder.like(root.get("city"), "%" + city + "%"));
             }
 
             if (startDate != null && !startDate.isEmpty()) {
                 LocalDate parsedDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                predicates.add(builder.equal(root.get("startDate"), parsedDate));
+                predicates.add(builder.like(root.get("startDate"), "%" + parsedDate + "%"));
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));

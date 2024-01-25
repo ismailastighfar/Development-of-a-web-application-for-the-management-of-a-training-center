@@ -2,6 +2,7 @@ package com.fst.trainingcenter.web;
 
 import com.fst.trainingcenter.dtos.CompanyDTO;
 import com.fst.trainingcenter.dtos.IndividualDTO;
+import com.fst.trainingcenter.dtos.TrainingDTO;
 import com.fst.trainingcenter.exceptions.CompanyAlreadyExistsException;
 import com.fst.trainingcenter.exceptions.CompanyNotFoundException;
 import com.fst.trainingcenter.exceptions.IndividualAlreadyExistsException;
@@ -9,6 +10,9 @@ import com.fst.trainingcenter.exceptions.IndividualNotFoundException;
 import com.fst.trainingcenter.services.CompanyService;
 import com.fst.trainingcenter.services.impl.CompanyServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -39,6 +43,16 @@ public class CompanyController {
                 HttpStatus.OK
         ) ;
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<CompanyDTO>> searchCompanies(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<CompanyDTO> result = companyService.searchCompanies(name, email, pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
     @PostMapping()
     public ResponseEntity<CompanyDTO> saveCompany(@RequestBody CompanyDTO  companyDTO) throws CompanyAlreadyExistsException {

@@ -49,6 +49,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AssistantNotFoundException.class)
+    public ResponseEntity<?> resourceNotFoundException(AssistantNotFoundException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(TrainerAlreadyExistsException.class)
     public ResponseEntity<?> resourceAlreadyExistsException(TrainerAlreadyExistsException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
@@ -57,6 +63,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IndividualAlreadyExistsException.class)
     public ResponseEntity<?> resourceAlreadyExistsException(IndividualAlreadyExistsException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(AssistantAlreadyExistsException.class)
+    public ResponseEntity<?> resourceAlreadyExistsException(AssistantAlreadyExistsException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
