@@ -6,10 +6,12 @@ const SignupTrainer = ({onOptionChange} : {onOptionChange: (newOption: number) =
 
 
     const initialFormData: TrainerData = {
+        id: 0,
         nom: '',
         surname: '',
         phone: '',
         email: '',
+        password: '',
         keywords: '',
         description:''
     };
