@@ -1,13 +1,11 @@
 package com.fst.trainingcenter.dtos;
 
-import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.enums.Category;
-import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class TrainingDTO {
@@ -23,7 +21,6 @@ public class TrainingDTO {
     private boolean isForCompany;
     private String city;
     private int maxSessions;
-    private List<IndividualDTO> individuals;
-    private TrainerDTO trainer;
-    private CompanyDTO company;
+    private  Long trainerId;
+    private Long companyId;
 }

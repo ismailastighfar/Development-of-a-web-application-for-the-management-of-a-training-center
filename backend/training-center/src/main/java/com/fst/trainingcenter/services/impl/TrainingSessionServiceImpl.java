@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -46,6 +48,18 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
     }
 
     @Override
+    public List<TrainingSessionDTO> getAllTrainingSessionsForTraining(Long trainingId) throws TrainingNotFoundException {
+        Training training = trainingRepository.findById(trainingId).orElseThrow(
+                () -> new TrainingNotFoundException("Training not found with id: " + trainingId));
+
+        List<TrainingSession> trainingSessions = training.getTrainingSessions();
+        return trainingSessions.stream()
+                .map(mappers::fromTrainingSession)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public TrainingSessionDTO createTrainingSession(TrainingSessionDTO trainingSessionDTO) throws InvalidTrainingSessionException, MaximumSessionsReachedException, TrainingNotFoundException {
         TrainingSession trainingSession = mappers.fromTrainingSessionDTO(trainingSessionDTO);
 
@@ -56,6 +70,15 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
         LocalDate trainingStartDate = associatedTraining.getStartDate();
         if (trainingSession.getSessionDate().isBefore(trainingStartDate)) {
             throw new InvalidTrainingSessionException("Session date must be on or after the training start date.");
+        }
+
+        // Check if the time is already assigned to the same training at the same date
+        LocalTime newSessionTime = trainingSession.getSessionTime();
+        for (TrainingSession existingSession : associatedTraining.getTrainingSessions()) {
+            if (existingSession.getSessionDate().equals(trainingSession.getSessionDate()) &&
+                    existingSession.getSessionTime().equals(newSessionTime)) {
+                throw new InvalidTrainingSessionException("Time is already assigned to the same training at the same date.");
+            }
         }
 
         if (associatedTraining.getTrainingSessions().size() >= associatedTraining.getMaxSessions()) {
@@ -85,6 +108,15 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
         if (idexistingTraining != associatedTraining.getId()){
             existingSession.getTraining().getTrainingSessions().remove(existingSession);
             existingSession.setTraining(associatedTraining);
+            // Check if the time is already assigned to the same training at the same date
+            LocalTime newSessionTime = trainingSessionDTO.getSessionTime();
+            for (TrainingSession otherSession : associatedTraining.getTrainingSessions()) {
+                if (otherSession.getSessionDate().equals(trainingSessionDTO.getSessionDate()) &&
+                        otherSession.getSessionTime().equals(newSessionTime) &&
+                        !otherSession.getId().equals(existingSession.getId())) {
+                    throw new InvalidTrainingSessionException("Time is already assigned to the same training at the same date.");
+                }
+            }
             if (associatedTraining.getTrainingSessions().size() >= associatedTraining.getMaxSessions()) {
                 throw new MaximumSessionsReachedException("Maximum number of sessions reached for training.");
             }

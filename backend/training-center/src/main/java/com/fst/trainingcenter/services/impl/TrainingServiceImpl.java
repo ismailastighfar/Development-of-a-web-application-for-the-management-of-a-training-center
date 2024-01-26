@@ -1,5 +1,6 @@
 package com.fst.trainingcenter.services.impl;
 
+import com.fst.trainingcenter.dtos.IndividualDTO;
 import com.fst.trainingcenter.dtos.TrainingDTO;
 import com.fst.trainingcenter.entities.Company;
 import com.fst.trainingcenter.entities.Individual;
@@ -25,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -64,12 +66,24 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
+    public List<IndividualDTO> getIndividualsByTraining(Long id) throws TrainingNotFoundException {
+        Training training = trainingRepository.findById(id).orElseThrow(
+                () -> new TrainingNotFoundException("training not found id : " + id)
+        );
+        List<Individual> individuals = training.getIndividuals();
+        return individuals.stream()
+                .map(individual -> mappers.fromIndividual(individual))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public TrainingDTO createTraining(TrainingDTO trainingDTO) throws TrainingAlreadyExistsException {
         Training training = mappers.fromTrainingDTO(trainingDTO);
         Training existTraining = trainingRepository.findTrainingByTitle(training.getTitle());
         if (existTraining != null)
             throw new TrainingAlreadyExistsException("training already Exists : " + training.getTitle());
         training.setCode(UUID.randomUUID().toString());
+        training.setCategory(trainingDTO.getCategory());
         Training trainingSaved = trainingRepository.save(training);
         return mappers.fromTraining(trainingSaved);
     }
@@ -140,6 +154,11 @@ public class TrainingServiceImpl implements TrainingService {
         training.getIndividuals().remove(individual);
         individual.getTrainings().remove(training);
         training.setAvailableSeats(training.getAvailableSeats() + 1);
+        if (training.getTrainer() != null){
+            if (training.getIndividuals().size() < 2) {
+               training.setTrainer(null);
+            }
+        }
         return mappers.fromTraining(training);
     }
 
@@ -185,17 +204,20 @@ public class TrainingServiceImpl implements TrainingService {
 
         training.setTrainer(trainer);
         training.setCompany(company);
-        trainer.getTrainings().add(training);
-        company.getTrainings().add(training);
-
+        //trainer.getTrainings().add(training);
+        //company.getTrainings().add(training);
         return mappers.fromTraining(training);
     }
 
     @Override
-    public TrainingDTO assignTrainerToIndividuals(Long trainingId, Long trainerId) throws TrainingNotFoundException, TrainerNotFoundException, NotEnoughIndividualsException {
+    public TrainingDTO assignTrainerToIndividuals(Long trainingId, Long trainerId) throws TrainingNotFoundException, TrainerNotFoundException, NotEnoughIndividualsException, TrainingNotForCompanyException {
         Training training = trainingRepository.findById(trainingId).orElseThrow(
                 () -> new TrainingNotFoundException("Training not found with id: " + trainingId)
         );
+
+        if(training.isForCompany())
+            throw new TrainingNotForCompanyException("Training with id: " + trainingId + " is intended for a company.");
+
 
         Trainer trainer = trainerRepository.findById(trainerId).orElseThrow(
                 () -> new TrainerNotFoundException("Trainer not found with id: " + trainerId)
@@ -203,12 +225,12 @@ public class TrainingServiceImpl implements TrainingService {
 
         List<Individual> individuals = training.getIndividuals();
 
-        if (individuals.size() < 5) {
-            throw new NotEnoughIndividualsException("At least 5 individuals are required for the training assignment.");
+        if (individuals.size() < 2) {
+            throw new NotEnoughIndividualsException("individuals are required for the training assignment.");
         }
 
         training.setTrainer(trainer);
-        trainer.getTrainings().add(training);
+        //trainer.getTrainings().add(training);
 
         return mappers.fromTraining(training);
     }

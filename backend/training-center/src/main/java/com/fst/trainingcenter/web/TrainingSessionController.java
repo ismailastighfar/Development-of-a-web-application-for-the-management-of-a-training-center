@@ -36,6 +36,14 @@ public class TrainingSessionController {
         );
     }
 
+    @GetMapping("/{id}/training")
+    public ResponseEntity<List<TrainingSessionDTO>> getAllTrainingSessionsForTraining(@PathVariable Long id) throws TrainingNotFoundException {
+        return new ResponseEntity<>(
+                trainingSessionService.getAllTrainingSessionsForTraining(id),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping
     public ResponseEntity<TrainingSessionDTO> saveSession(@RequestBody TrainingSessionDTO trainingSessionDTO) throws MaximumSessionsReachedException, InvalidTrainingSessionException, TrainingNotFoundException {
         return new ResponseEntity<>(

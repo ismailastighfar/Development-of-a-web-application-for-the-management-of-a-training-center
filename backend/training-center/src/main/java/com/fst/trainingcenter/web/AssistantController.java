@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/assistants")
 public class AssistantController {
 
     private AssistantService assistantService;
@@ -44,7 +45,7 @@ public class AssistantController {
         );
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<AssistantDTO> updateAssistant(@PathVariable Long id,@RequestBody AssistantDTO assistantDTO) throws AssistantNotFoundException {
         return new ResponseEntity<>(
                 assistantService.updateAssistant(id,assistantDTO),
