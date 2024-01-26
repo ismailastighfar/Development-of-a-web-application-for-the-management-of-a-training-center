@@ -2,6 +2,7 @@ package com.fst.trainingcenter.web;
 
 
 import com.fst.trainingcenter.dtos.TrainingDTO;
+import com.fst.trainingcenter.enums.Category;
 import com.fst.trainingcenter.exceptions.*;
 import com.fst.trainingcenter.services.TrainingService;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -36,6 +39,15 @@ public class TrainingController {
                 trainingService.getTraining(id),
                 HttpStatus.OK
                 );
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getCategories() {
+        List<String> domains = Arrays.stream(Category.values())
+                .map(Category::getValue)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(domains, HttpStatus.OK);
     }
 
     @PostMapping
@@ -80,7 +92,7 @@ public class TrainingController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<TrainingDTO>> searchTrainings(
-            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Category category,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String startDate,
             @PageableDefault(size = 10) Pageable pageable) {

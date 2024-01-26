@@ -28,7 +28,7 @@ public class TrainingCenterApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
+	//@Bean
 	CommandLineRunner commandLineRunner(ISecurityService securityService , TrainerRepository trainerRepository
 			, PasswordEncoder passwordEncoder, IndividualRepository individualRepository
 										){

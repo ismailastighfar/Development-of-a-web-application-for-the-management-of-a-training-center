@@ -1,5 +1,6 @@
 package com.fst.trainingcenter.entities;
 
+import com.fst.trainingcenter.enums.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,8 @@ public class Training {
     private LocalDate startDate;
     private String objectives;
     private String detailed_program;
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
     private boolean isForCompany;
     private String city;
     private String code;
