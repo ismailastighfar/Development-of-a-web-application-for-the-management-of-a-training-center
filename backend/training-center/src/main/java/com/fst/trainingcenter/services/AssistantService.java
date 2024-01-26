@@ -13,5 +13,7 @@ public interface AssistantService {
     AssistantDTO createAssistant(AssistantDTO assistantDTO) throws AssistantAlreadyExistsException;
     AssistantDTO updateAssistant(Long id,AssistantDTO assistantDTO) throws AssistantNotFoundException;
     void deleteAssistant(Long id) throws AssistantNotFoundException;
+    void initiatePasswordReset(String email);
+    Boolean completePasswordReset(String token, String newPassword);
 
 }

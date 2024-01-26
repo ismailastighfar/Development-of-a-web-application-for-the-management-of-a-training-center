@@ -2,6 +2,7 @@ package com.fst.trainingcenter.services.Email;
 
 import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
+import com.fst.trainingcenter.security.entities.AppUser;
 
 public class EmailContentGenerator {
     private static String styles = EmailStyles.getStyles();
@@ -85,6 +86,26 @@ public class EmailContentGenerator {
                 + "<p>Please use your email and this temporary password, but remember to change it as soon as possible: " + password + " to access your trainer account:</p>"
                 +" <p>Best regards,</p>"
                 +"  <p>The Training Center Team</p>"
+                + "  </div>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+    }
+
+    public static  String getEmailContent(String token, AppUser user) {
+        return "<html>"
+                + styles
+                + "<body>"
+                + "  <div class='image-container'>"
+                + "    <img src='" + logoLink + "' alt='Logo' class='image'/>"
+                + "  </div>"
+                + "<div class='container'>"
+                + "  <div class='text-container'>"
+                + "    <b>Hi"+" "+ user.getNom()+" "+user.getSurname()+","+"</b><br>"
+                + "    <p>Sorry to hear you’re having trouble logging into <span>Training center</span><br><br>"
+                + "       We got a message that you forgot your password. If this was you, <br><br>"
+                + "       reset your password now using this token :" + token + "</p><br><br>"
+                + "    <div class='ntt'>© 2024 Training center </div>"
                 + "  </div>"
                 + "</div>"
                 + "</body>"
