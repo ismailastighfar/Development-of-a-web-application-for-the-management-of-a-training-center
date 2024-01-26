@@ -31,3 +31,37 @@ label {
     margin-bottom: 3px;
     color: $color-primary;
 }
+
+select {
+
+    border: 0;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    color: $color-dark-1;
+    border-radius: 8px;
+    height: $form-element-size;
+    width: 100%;
+    background: $color-white ;
+    transition: all 0.4s ease;
+
+    &::placeholder {
+        color: $color-dark-2;
+    }
+    &::-webkit-input-placeholder {
+        color: $color-dark-2;
+    }
+    &:-ms-input-placeholder {
+        color: $color-dark-2;
+    }
+    &:hover {
+        outline: 1px solid $color-primary;
+    }
+    &:focus {
+        outline: 2px solid $color-primary;
+    }
+
+}
+
+input[type = "checkbox"]{
+    width: 25px;
+}

@@ -24,3 +24,13 @@
         filter: brightness(1.2);
     }
 }
+
+.button-spacing {
+    margin-left: 15px; // Adjust the right margin to set the space between buttons
+  }
+  
+button {
+    & + button {
+      @extend .button-spacing;
+    }
+  }
