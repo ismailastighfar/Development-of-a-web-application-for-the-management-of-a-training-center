@@ -62,7 +62,7 @@ public class CompanyController {
         );
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<CompanyDTO> updateCompany(@PathVariable Long id,@RequestBody CompanyDTO companyDTO) throws CompanyNotFoundException {
         return new ResponseEntity<>(
                 companyService.updateCompany(id,companyDTO),

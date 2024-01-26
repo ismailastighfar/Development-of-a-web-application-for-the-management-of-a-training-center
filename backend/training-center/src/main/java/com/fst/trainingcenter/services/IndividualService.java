@@ -16,7 +16,7 @@ public interface IndividualService {
     IndividualDTO getIndividual(Long id) throws IndividualNotFoundException;
     List<TrainingDTO> getTrainingsForIndividual(Long individualId) throws IndividualNotFoundException;
     Page<IndividualDTO> searchIndividuals(String name, String email, Pageable pageable);
-    IndividualDTO createIndividual(IndividualDTO individualDTO) throws IndividualAlreadyExistsException;
+    IndividualDTO createIndividual(IndividualDTO individualDTO) throws IndividualAlreadyExistsException, IndividualNotFoundException;
     IndividualDTO updateIndividual(Long id,IndividualDTO individualDTO) throws IndividualNotFoundException;
     boolean deleteIndividual(Long id);
 

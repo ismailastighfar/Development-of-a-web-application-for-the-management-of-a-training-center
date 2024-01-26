@@ -15,6 +15,7 @@ public interface TrainingSessionService {
 
     List<TrainingSessionDTO> getAllTrainingSessions();
     TrainingSessionDTO getTrainingSession(Long id) throws TrainingSessionNotFoundException;
+    List<TrainingSessionDTO> getAllTrainingSessionsForTraining(Long trainingId) throws TrainingNotFoundException;
     TrainingSessionDTO createTrainingSession(TrainingSessionDTO trainingSession) throws InvalidTrainingSessionException, MaximumSessionsReachedException, TrainingNotFoundException;
     TrainingSessionDTO updateTrainingSession(Long id , TrainingSessionDTO trainingSession) throws TrainingSessionNotFoundException, InvalidTrainingSessionException, TrainingNotFoundException, MaximumSessionsReachedException;
     void deleteTrainingSession(Long id) throws TrainingSessionNotFoundException;

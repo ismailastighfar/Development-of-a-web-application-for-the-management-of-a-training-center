@@ -1,6 +1,7 @@
 package com.fst.trainingcenter.web;
 
 
+import com.fst.trainingcenter.dtos.IndividualDTO;
 import com.fst.trainingcenter.dtos.TrainingDTO;
 import com.fst.trainingcenter.enums.Category;
 import com.fst.trainingcenter.exceptions.*;
@@ -33,7 +34,7 @@ public class TrainingController {
 
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<TrainingDTO> getTraining(@PathVariable Long id) throws TrainingNotFoundException {
         return new ResponseEntity<>(
                 trainingService.getTraining(id),
@@ -42,13 +43,28 @@ public class TrainingController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<String>> getCategories() {
-        List<String> domains = Arrays.stream(Category.values())
-                .map(Category::getValue)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<Category>> getCategories() {
+       List<Category> categories = Arrays.asList(Category.values());
 
-        return new ResponseEntity<>(domains, HttpStatus.OK);
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
+
+    @GetMapping("/isCompany/{isCompany}")
+    public ResponseEntity<List<TrainingDTO>> getTrainingsByIsCompany(@PathVariable boolean isCompany) {
+        return new ResponseEntity<>(
+                trainingService.getTrainingsByIsCompany(isCompany),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/individuals")
+    public ResponseEntity<List<IndividualDTO>> getIndividuals(@PathVariable Long id) throws TrainingNotFoundException {
+        return new ResponseEntity<>(
+                trainingService.getIndividualsByTraining(id),
+                HttpStatus.OK);
+    }
+
+
 
     @PostMapping
     public ResponseEntity<TrainingDTO> saveTraining(@RequestBody TrainingDTO trainingDTO) throws TrainingAlreadyExistsException {
@@ -58,7 +74,7 @@ public class TrainingController {
         );
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TrainingDTO> updateTraining(@PathVariable Long id,@RequestBody TrainingDTO trainingDTO) throws TrainingNotFoundException {
         return new ResponseEntity<>(
                 trainingService.updateTraining(id, trainingDTO),
@@ -66,7 +82,7 @@ public class TrainingController {
         );
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTraining(@PathVariable Long id) throws TrainingNotFoundException {
        trainingService.deleteTraining(id);
        return new ResponseEntity<>(HttpStatus.OK);
@@ -112,7 +128,7 @@ public class TrainingController {
     @PostMapping("/{trainingId}/assign/trainer/{trainerId}/individuals")
     public ResponseEntity<TrainingDTO> assignTrainerToIndividuals(
             @PathVariable Long trainingId,
-            @PathVariable Long trainerId) throws NotEnoughIndividualsException, TrainingNotFoundException, TrainerNotFoundException {
+            @PathVariable Long trainerId) throws NotEnoughIndividualsException, TrainingNotFoundException, TrainerNotFoundException, TrainingNotForCompanyException {
         TrainingDTO result = trainingService.assignTrainerToIndividuals(trainingId, trainerId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

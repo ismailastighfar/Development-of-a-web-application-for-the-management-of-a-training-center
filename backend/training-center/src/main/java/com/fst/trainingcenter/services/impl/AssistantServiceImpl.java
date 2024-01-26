@@ -2,19 +2,26 @@ package com.fst.trainingcenter.services.impl;
 
 import com.fst.trainingcenter.dtos.AssistantDTO;
 import com.fst.trainingcenter.dtos.TrainerDTO;
+import com.fst.trainingcenter.entities.PasswordResetToken;
 import com.fst.trainingcenter.exceptions.AssistantAlreadyExistsException;
 import com.fst.trainingcenter.exceptions.AssistantNotFoundException;
+import com.fst.trainingcenter.exceptions.IndividualNotFoundException;
 import com.fst.trainingcenter.mappers.MappersImpl;
+import com.fst.trainingcenter.repositories.PasswordResetTokenRepository;
 import com.fst.trainingcenter.security.entities.AppUser;
 import com.fst.trainingcenter.security.repositories.AppUserRepository;
 import com.fst.trainingcenter.security.services.ISecurityService;
 import com.fst.trainingcenter.services.AssistantService;
+import com.fst.trainingcenter.services.EmailService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -23,6 +30,8 @@ public class AssistantServiceImpl implements AssistantService {
 
     private ISecurityService securityService;
     private AppUserRepository<AppUser> appUserRepository;
+    private PasswordResetTokenRepository passwordResetTokenRepository;
+    private EmailService emailService;
     private MappersImpl mappers;
     private PasswordEncoder passwordEncoder;
 
@@ -75,4 +84,55 @@ public class AssistantServiceImpl implements AssistantService {
         );
         appUserRepository.delete(assistant);
     }
+
+    @Override
+    public void initiatePasswordReset(String email) {
+        try {
+            AppUser user = appUserRepository.findAppUserByEmail(email);
+            if(user==null){
+                throw new IndividualNotFoundException("User not found with this email");
+            }
+            String token = generatePasswordResetToken();
+
+            PasswordResetToken resetToken = new PasswordResetToken();
+            System.out.println("le token " + token);
+            resetToken.setToken(token);
+            resetToken.setExpiryDate(calculateExpiryDate());
+
+            resetToken.setUser(user);
+            passwordResetTokenRepository.save(resetToken);
+            emailService.sendPasswordResetEmail(user.getEmail(), token);
+        } catch (Exception e) {
+            System.out.println("erreur in initiatePasswordReset");
+        }
+    }
+
+    @Override
+    public Boolean completePasswordReset(String token, String newPassword) {
+        System.out.println("token " + token + " pass " + newPassword);
+        PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);
+        if (resetToken != null && !resetToken.isExpired()) {
+            AppUser user = resetToken.getUser();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            appUserRepository.save(user);
+            System.out.println("saved new pass");
+            passwordResetTokenRepository.delete(resetToken);
+            return true;
+        } else {
+            System.out.println("Invalid or expired token");
+            return false;
+        }
+    }
+
+    private String generatePasswordResetToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    private Date calculateExpiryDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MINUTE, 30);
+        return cal.getTime();
+    }
+
 }

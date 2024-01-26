@@ -6,6 +6,7 @@ import com.fst.trainingcenter.dtos.TrainerRequestDTO;
 import com.fst.trainingcenter.dtos.TrainingDTO;
 import com.fst.trainingcenter.exceptions.TrainerAlreadyExistsException;
 import com.fst.trainingcenter.exceptions.TrainerNotFoundException;
+import com.fst.trainingcenter.exceptions.TrainingNotFoundException;
 import com.fst.trainingcenter.services.TrainerService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -107,7 +108,7 @@ public class TrainerController {
     }
 
     @DeleteMapping("/trainers/refuse/{id}")
-    public ResponseEntity<Void> refuseTrainer(@PathVariable Long id) throws TrainerNotFoundException, TrainerAlreadyExistsException {
+    public ResponseEntity<Void> refuseTrainer(@PathVariable Long id) throws TrainerNotFoundException, TrainerAlreadyExistsException, TrainingNotFoundException {
         boolean deleted = trainerService.refuseTrainer(id);
         if (!deleted)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -14,9 +14,11 @@ import com.fst.trainingcenter.repositories.IndividualRepository;
 import com.fst.trainingcenter.security.entities.AppRole;
 import com.fst.trainingcenter.security.entities.AppUser;
 import com.fst.trainingcenter.security.services.ISecurityService;
+import com.fst.trainingcenter.services.EmailService;
 import com.fst.trainingcenter.services.IndividualService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,12 +30,14 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class IndividualServiceImpl implements IndividualService {
 
     private IndividualRepository individualRepository;
     private ISecurityService securityService;
     private PasswordEncoder passwordEncoder;
     private MappersImpl mappers;
+    private EmailService emailService;
     @Override
     public List<IndividualDTO> getAllIndividuals() {
         List<Individual> individuals = individualRepository.findAll();
@@ -84,7 +88,7 @@ public class IndividualServiceImpl implements IndividualService {
     }
 
     @Override
-    public IndividualDTO createIndividual(IndividualDTO individualDTO) throws IndividualAlreadyExistsException {
+    public IndividualDTO createIndividual(IndividualDTO individualDTO) throws IndividualAlreadyExistsException{
         Individual individual = mappers.fromIndividualDTO(individualDTO);
         AppUser user = securityService.findUserByEmail(individual.getEmail());
         if (user != null)
@@ -96,14 +100,17 @@ public class IndividualServiceImpl implements IndividualService {
         newIndividual.setPhone(individual.getPhone());
         String password = individual.getPassword();
         newIndividual.setPassword(passwordEncoder.encode(password));
-        
         newIndividual.setDateOfBirth(individual.getDateOfBirth());
         Individual individualSaved = individualRepository.save(newIndividual);
+        try{
+            emailService.sendEmailNewIndividual(individualSaved.getId());
+        } catch (IndividualNotFoundException e){
+            throw new RuntimeException(e);
+        }
+
         AppRole role = securityService.findRoleByRoleName("INDIVIDUAL");
         securityService.addRoleToUser(role.getRoleName(),individualSaved.getEmail());
         return mappers.fromIndividual(individualSaved);
-
-
     }
 
     @Override

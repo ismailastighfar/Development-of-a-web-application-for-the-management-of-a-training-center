@@ -58,7 +58,7 @@ public class IndividualController {
     }
 
     @PostMapping("/individuals")
-    public ResponseEntity<IndividualDTO> saveIndividual(@RequestBody IndividualDTO individualDTO) throws IndividualAlreadyExistsException {
+    public ResponseEntity<IndividualDTO> saveIndividual(@RequestBody IndividualDTO individualDTO) throws IndividualAlreadyExistsException, IndividualNotFoundException {
         return new ResponseEntity<>(
                 individualService.createIndividual(individualDTO),
                 HttpStatus.CREATED

@@ -7,9 +7,6 @@ import com.fst.trainingcenter.security.entities.AppUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MappersImpl {
@@ -74,34 +71,16 @@ public class MappersImpl {
     public Training fromTrainingDTO(TrainingDTO trainingDTO){
         Training training = new Training();
         BeanUtils.copyProperties(trainingDTO,training);
-        if (trainingDTO.getIndividuals() != null) {
-            List<Individual> individuals = trainingDTO.getIndividuals()
-                    .stream()
-                    .map(this::fromIndividualDTO)
-                    .collect(Collectors.toList());
-            training.setIndividuals(individuals);
-        }
-        if(trainingDTO.getCompany() != null)
-          training.setCompany(fromCompanyDTO(trainingDTO.getCompany()));
-        if (trainingDTO.getTrainer() != null)
-           training.setTrainer(fromTrainerDTO(trainingDTO.getTrainer()));
         return training;
     }
 
     public TrainingDTO fromTraining(Training training){
         TrainingDTO trainingDTO = new TrainingDTO();
         BeanUtils.copyProperties(training,trainingDTO);
-        if (training.getIndividuals() != null) {
-            List<IndividualDTO> individualDTOs = training.getIndividuals()
-                    .stream()
-                    .map(this::fromIndividual)
-                    .collect(Collectors.toList());
-            trainingDTO.setIndividuals(individualDTOs);
-        }
         if(training.getCompany() != null)
-          trainingDTO.setCompany(fromCompany(training.getCompany()));
+          trainingDTO.setCompanyId(training.getCompany().getId());
         if(training.getTrainer() != null)
-           trainingDTO.setTrainer(fromTrainer(training.getTrainer()));
+           trainingDTO.setTrainerId(training.getTrainer().getId());
         return trainingDTO;
     }
 

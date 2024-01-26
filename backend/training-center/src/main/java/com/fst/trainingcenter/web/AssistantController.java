@@ -13,11 +13,13 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+
 public class AssistantController {
 
     private AssistantService assistantService;
 
-    @GetMapping
+
+    @GetMapping("/assistants")
     public ResponseEntity<List<AssistantDTO>> getAllAssistants(){
         return new ResponseEntity<>(
                 assistantService.getAllAssistants(),
@@ -25,7 +27,7 @@ public class AssistantController {
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/assistants/{id}")
     public ResponseEntity<AssistantDTO> getAssistant(@PathVariable Long id) throws AssistantNotFoundException {
         return new ResponseEntity<>(
                 assistantService.getAssistant(id),
@@ -36,7 +38,7 @@ public class AssistantController {
 
 
 
-    @PostMapping()
+    @PostMapping("/assistants")
     public ResponseEntity<AssistantDTO> saveAssistant(@RequestBody AssistantDTO  assistantDTO) throws AssistantAlreadyExistsException {
         return new ResponseEntity<>(
                 assistantService.createAssistant(assistantDTO),
@@ -44,7 +46,7 @@ public class AssistantController {
         );
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/assistants/{id}")
     public ResponseEntity<AssistantDTO> updateAssistant(@PathVariable Long id,@RequestBody AssistantDTO assistantDTO) throws AssistantNotFoundException {
         return new ResponseEntity<>(
                 assistantService.updateAssistant(id,assistantDTO),
@@ -52,9 +54,24 @@ public class AssistantController {
         );
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/assistants/{id}")
     public ResponseEntity<?> deleteAssistant(@PathVariable Long id) throws AssistantNotFoundException {
         assistantService.deleteAssistant(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/forgot-password/{email}")
+    public ResponseEntity<String> forgotPassword(@PathVariable("email") String email) {
+        assistantService.initiatePasswordReset(email);
+        return ResponseEntity.ok("Password reset link sent successfully");
+    }
+
+    @GetMapping("/reset-password/{token}/{newPassword}")
+    public ResponseEntity<Boolean> resetPassword(@PathVariable("token") String token, @PathVariable("newPassword") String newPassword ) {
+        System.out.println("/reset-password/{token}/{newPassword} ");
+        return new ResponseEntity<>(
+                assistantService.completePasswordReset(token,newPassword),
+                HttpStatus.OK);
+    }
+
 }
