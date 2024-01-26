@@ -12,13 +12,13 @@ export interface TrainerData {
     description:string;
 }
 
+//General Header
+const headers = {
+    'Content-Type': 'application/json', // Example header, adjust as needed
+};
+
 //create user Request
 export const ApplyToTrainer = (trainerData: TrainerData) => {
-
-        //General Header
-    const headers = {
-        'Content-Type': 'application/json', // Example header, adjust as needed
-    };
         
     return API.post("/trainers/apply", trainerData , {headers})
         .then((res) => res)
@@ -31,7 +31,8 @@ export const ApplyToTrainer = (trainerData: TrainerData) => {
 
 //get trainer by id 
 export const getTrainerById = (id: number) => {
-    return API.get(`/trainers/${id}`)   
+
+    return API.get(`/trainers/${id}`, {headers})   
         .then((res) => res.data)
         .catch((error) => {
             const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
@@ -70,4 +71,18 @@ export const UpdateTrainer = (trainerData: TrainerData) => {
             throw new Error(errorMessage);        
         });
     
-    }
+}
+
+//get all trainers
+export const getAllTrainers = () => {
+
+    return API.get(`/trainers` , {headers}) 
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+
+}
+
+
