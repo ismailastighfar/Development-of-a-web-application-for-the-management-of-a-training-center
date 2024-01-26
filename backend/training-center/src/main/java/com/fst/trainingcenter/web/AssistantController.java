@@ -18,6 +18,7 @@ public class AssistantController {
 
     private AssistantService assistantService;
 
+
     @GetMapping
     public ResponseEntity<List<AssistantDTO>> getAllAssistants(){
         return new ResponseEntity<>(

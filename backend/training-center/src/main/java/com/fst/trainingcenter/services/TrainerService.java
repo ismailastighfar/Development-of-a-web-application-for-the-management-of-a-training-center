@@ -8,6 +8,7 @@ import com.fst.trainingcenter.dtos.TrainerRequestDTO;
 import com.fst.trainingcenter.dtos.TrainingDTO;
 import com.fst.trainingcenter.exceptions.TrainerAlreadyExistsException;
 import com.fst.trainingcenter.exceptions.TrainerNotFoundException;
+import com.fst.trainingcenter.exceptions.TrainingNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,6 +25,6 @@ public interface TrainerService {
     boolean deleteTrainer(Long id);
     TrainerDTO applyAsTrainer(TrainerRequestDTO trainerRequestDTO) throws TrainerAlreadyExistsException;
     TrainerDTO acceptTrainer(Long trainerId) throws TrainerNotFoundException, TrainerAlreadyExistsException;
-    boolean refuseTrainer(Long trainerId) throws TrainerNotFoundException, TrainerAlreadyExistsException;
+    boolean refuseTrainer(Long trainerId) throws TrainerNotFoundException, TrainerAlreadyExistsException, TrainingNotFoundException;
 
 }
