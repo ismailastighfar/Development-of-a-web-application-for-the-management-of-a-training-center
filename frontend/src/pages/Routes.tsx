@@ -1,6 +1,7 @@
 import Formations from "./formations/Formations";
 import Home from "./home/Home";
 import TrainerForm from "./Trainers/TrainerForm";
+import CompaniesList from "./Company/CompaniesList";
 import CompanyForm from "./Company/CompanyForm";
 import TrainingForm from "./Training/TrainingForm";
 
@@ -52,5 +53,11 @@ export const routesData = [
         path: "/trainingdetail",
         element: <TrainingForm />,
         showInNav: false,
+    },
+    {
+        label: "Companies",
+        path: "/companies",
+        element: <CompaniesList />,
+        showInNav: true,
     },
 ];
