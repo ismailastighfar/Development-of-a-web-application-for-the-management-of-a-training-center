@@ -162,7 +162,7 @@ public class TrainingServiceImpl implements TrainingService {
         return mappers.fromTraining(training);
     }
 
-    public Page<TrainingDTO> searchTrainings(Category category, String city, String startDate, Pageable pageable) {
+    public Page<TrainingDTO> searchTrainings(Category category, String city, String endEnrollDate, Pageable pageable) {
         Page<Training> trainingPage = trainingRepository.findAll((root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -174,8 +174,8 @@ public class TrainingServiceImpl implements TrainingService {
                 predicates.add(builder.like(root.get("city"), "%" + city + "%"));
             }
 
-            if (startDate != null && !startDate.isEmpty()) {
-                LocalDate parsedDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            if (endEnrollDate != null && !endEnrollDate.isEmpty()) {
+                LocalDate parsedDate = LocalDate.parse(endEnrollDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 predicates.add(builder.like(root.get("startDate"), "%" + parsedDate + "%"));
             }
 
@@ -225,8 +225,8 @@ public class TrainingServiceImpl implements TrainingService {
 
         List<Individual> individuals = training.getIndividuals();
 
-        if (individuals.size() < 2) {
-            throw new NotEnoughIndividualsException("individuals are required for the training assignment.");
+        if (individuals.size() < training.getMinSeats()) {
+            throw new NotEnoughIndividualsException( training.getMinSeats() + " individuals are required for the training assignment.");
         }
 
         training.setTrainer(trainer);

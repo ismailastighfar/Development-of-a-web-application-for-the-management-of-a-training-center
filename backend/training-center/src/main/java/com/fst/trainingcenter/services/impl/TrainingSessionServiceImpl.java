@@ -67,16 +67,16 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
                 () -> new TrainingNotFoundException("training not found id :" + trainingSessionDTO.getTrainingId()));
         trainingSession.setTraining(associatedTraining);
 
-        LocalDate trainingStartDate = associatedTraining.getStartDate();
+        LocalDate trainingStartDate = associatedTraining.getEndEnrollDate();
         if (trainingSession.getSessionDate().isBefore(trainingStartDate)) {
             throw new InvalidTrainingSessionException("Session date must be on or after the training start date.");
         }
 
         // Check if the time is already assigned to the same training at the same date
-        LocalTime newSessionTime = trainingSession.getSessionTime();
+        LocalTime newSessionTime = trainingSession.getSessionStartTime();
         for (TrainingSession existingSession : associatedTraining.getTrainingSessions()) {
             if (existingSession.getSessionDate().equals(trainingSession.getSessionDate()) &&
-                    existingSession.getSessionTime().equals(newSessionTime)) {
+                    existingSession.getSessionStartTime().equals(newSessionTime)) {
                 throw new InvalidTrainingSessionException("Time is already assigned to the same training at the same date.");
             }
         }
@@ -98,7 +98,7 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
         Training associatedTraining = trainingRepository.findById(trainingSessionDTO.getTrainingId()).orElseThrow(
                 () -> new TrainingNotFoundException("training not found id :" + trainingSessionDTO.getTrainingId()));
 
-        LocalDate trainingStartDate = associatedTraining.getStartDate();
+        LocalDate trainingStartDate = associatedTraining.getEndEnrollDate();
 
         if (trainingSessionDTO.getSessionDate().isBefore(trainingStartDate)) {
             throw new InvalidTrainingSessionException("Session date must be on or after the training start date.");
@@ -109,10 +109,10 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
             existingSession.getTraining().getTrainingSessions().remove(existingSession);
             existingSession.setTraining(associatedTraining);
             // Check if the time is already assigned to the same training at the same date
-            LocalTime newSessionTime = trainingSessionDTO.getSessionTime();
+            LocalTime newSessionTime = trainingSessionDTO.getSessionStartTime();
             for (TrainingSession otherSession : associatedTraining.getTrainingSessions()) {
                 if (otherSession.getSessionDate().equals(trainingSessionDTO.getSessionDate()) &&
-                        otherSession.getSessionTime().equals(newSessionTime) &&
+                        otherSession.getSessionStartTime().equals(newSessionTime) &&
                         !otherSession.getId().equals(existingSession.getId())) {
                     throw new InvalidTrainingSessionException("Time is already assigned to the same training at the same date.");
                 }
@@ -124,7 +124,8 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
         }
 
         existingSession.setSessionDate(trainingSessionDTO.getSessionDate());
-        existingSession.setSessionTime(trainingSessionDTO.getSessionTime());
+        existingSession.setSessionStartTime(trainingSessionDTO.getSessionStartTime());
+        existingSession.setSessionEndTime(trainingSessionDTO.getSessionEndTime());
         existingSession.setDuration(trainingSessionDTO.getDuration());
 
         TrainingSession updatedSession = trainingSessionRepository.save(existingSession);
