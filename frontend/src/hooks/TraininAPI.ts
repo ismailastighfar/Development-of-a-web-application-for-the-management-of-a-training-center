@@ -18,6 +18,7 @@ export interface TrainingData {
     companyId: number | null ;
 }
 
+
 //General Header
 const headers = {
     'Content-Type': 'application/json', // Example header, adjust as needed
@@ -64,6 +65,32 @@ export const AssignTrainingToCompany = (trainingId : number , trainerId : number
 
     return API.post(`/trainings/${trainerId}/assign/company/${companyId}/trainer/${trainingId}` , {headers})
         .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+
+}
+
+//get all trainings by page
+export const getTrainingList = (page: number , size : number) => {
+
+    // /trainings/search?category=<string>&city=<string>&startDate=<string>&page=<integer>&size=<integer>&sort=<string>,<string>`
+
+    return API.get(`/trainings/search?page=${page}&size=${size}` , {headers}) 
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+
+}
+
+//get categories
+export const getCategories = () => {
+
+    return API.get(`/trainings/categories` , {headers}) 
+        .then((res) => res.data)
         .catch((error) => {
             const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
             throw new Error(errorMessage);        
