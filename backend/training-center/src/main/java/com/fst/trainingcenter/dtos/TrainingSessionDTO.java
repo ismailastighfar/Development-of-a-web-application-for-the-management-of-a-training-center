@@ -9,7 +9,8 @@ import java.time.LocalTime;
 public class TrainingSessionDTO {
     private Long id;
     private LocalDate sessionDate;
-    private LocalTime sessionTime;
+    private LocalTime sessionStartTime;
+    private LocalTime sessionEndTime;
     private int duration;
     private Long trainingId;
 }

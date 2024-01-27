@@ -18,7 +18,9 @@ public class TrainingSession {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate sessionDate;
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime sessionTime;
+    private LocalTime sessionStartTime;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime sessionEndTime;
     private int duration;
     @ManyToOne
     private Training training;

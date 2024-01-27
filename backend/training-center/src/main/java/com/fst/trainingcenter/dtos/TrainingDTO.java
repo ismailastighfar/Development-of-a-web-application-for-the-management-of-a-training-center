@@ -14,7 +14,8 @@ public class TrainingDTO {
     private int hours;
     private float cost;
     private int availableSeats;
-    private LocalDate startDate;
+    private int minSeats;
+    private LocalDate endEnrollDate;
     private String objectives;
     private String detailed_program;
     private Category category;

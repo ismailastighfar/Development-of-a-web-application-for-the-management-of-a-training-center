@@ -23,8 +23,9 @@ public class Training {
     private int hours;
     private float cost;
     private int availableSeats;
+    private int minSeats;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
+    private LocalDate endEnrollDate;
     private String objectives;
     private String detailed_program;
     @Enumerated(EnumType.STRING)
