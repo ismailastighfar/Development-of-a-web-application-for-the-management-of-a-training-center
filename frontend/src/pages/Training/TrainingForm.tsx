@@ -1,4 +1,4 @@
-import { TrainingData , CreateTraining , UpdateTraining , getTrainingById , AssignTrainingToCompany} from "../../hooks/TraininAPI";
+import { TrainingData , CreateTraining , UpdateTraining , getTrainingById , AssignTrainingToCompany , getCategories} from "../../hooks/TraininAPI";
 import { CompanyData , getAllCompanies } from "../../hooks/CompanyAPI";
 import { TrainerData , getAllTrainers} from "../../hooks/TrainerAPI";
 import { ChangeEvent,FormEvent ,useState,useEffect , useRef } from "react";
@@ -35,6 +35,7 @@ const TrainingForm: React.FC = () => {
     const [trainingId, setTrainingId] = useState<number>(parseInt(id || '0'));
     const [CompaniesList , setCompaniesList] = useState<DropdownData[]>([]);
     const [TrainersList , setTrainersList] = useState<DropdownData[]>([]);
+    const [CategoriesList , setCategoriesList] = useState<DropdownData[]>([]);
 
     const [formData, setFormData] = useState<TrainingData>(initialTrainingData)
 
@@ -67,6 +68,15 @@ const TrainingForm: React.FC = () => {
                         name: trainer.nom || '', 
                     }));
                     setTrainersList(dropdownDataTrainers);
+
+                    const Categoriesresponce = await getCategories();
+                    console.log("categories : ",Categoriesresponce)
+                    const dropdownDataCategories = Categoriesresponce.map((category: any) => ({
+                        id: 1,
+                        name: category || '', 
+                    }));
+
+                    setCategoriesList(dropdownDataCategories);
 
 
                 } catch (error) {
@@ -119,15 +129,22 @@ const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData({
         ...formData,
-        [name]: new Date(value),
+        [name]: value,
     });    
 }
 
+const hadleCategoryDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCategory = e.target.value;
+    setFormData({
+      ...formData,
+      category: selectedCategory,
+    });
+  };
 
 const handleSubmit = async (event: FormEvent) => {
     event.preventDefault(); // Prevent the default form submission behavior
     try{
-        const response =  (trainingId == 0 ?await CreateTraining(formData) : await UpdateTraining(formData));
+        const response =  (trainingId == 0 ? await CreateTraining(formData) : await UpdateTraining(formData));
         console.log(response);
         if (response.status === 201 || response.status === 200) {
             // Add a message bofore doing something else
@@ -136,6 +153,8 @@ const handleSubmit = async (event: FormEvent) => {
                 const responseAssign = await AssignTrainingToCompany(trainingId , formData.trainerId , formData.companyId);
                 console.log(responseAssign);
             }
+            formData.id = trainingId;
+            setFormData(formData);
             alert("Training saved successfully"); 
         }else { 
             alert("Failed to save the trainer. Please try again."); 
@@ -260,16 +279,19 @@ const handleSubmit = async (event: FormEvent) => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="category">Category</label>
-                        <input
+                        <select 
                             id="category"
                             name="category"
-                            type="text"
-                            value={formData?.category}
-                            placeholder="category"
-                            onChange={handleFormChange}
-                            required={true}
-                            disabled={false}
-                        />
+                            value={formData?.category} 
+                            onChange={hadleCategoryDropdownChange} 
+                            required>
+                            <option value="0">  </option>
+                            {CategoriesList.map((dropdownItem) => (
+                                    <option key={dropdownItem.id} value={dropdownItem.name}>
+                                        {dropdownItem.name}
+                                    </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="forCompany">Is for company</label>
@@ -282,7 +304,7 @@ const handleSubmit = async (event: FormEvent) => {
                             onChange={handleIsForCompanyChange}
                         />
                     </div>
-                    <div className="form-group">
+                    {/* <div className="form-group">
                         <label htmlFor="company">Company</label>
                         <select 
                             id="company"
@@ -313,7 +335,7 @@ const handleSubmit = async (event: FormEvent) => {
                                     </option>
                             ))}
                         </select>
-                </div>
+                </div> */}
                 </div>  
             </form>
     );

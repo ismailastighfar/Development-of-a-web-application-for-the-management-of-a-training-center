@@ -4,6 +4,9 @@ import TrainerForm from "./Trainers/TrainerForm";
 import CompaniesList from "./Company/CompaniesList";
 import CompanyForm from "./Company/CompanyForm";
 import TrainingForm from "./Training/TrainingForm";
+import TrainersList from "./Trainers/TrainersList";
+import TrainingList from "./Training/TrainingList";
+import CalendarPlanification from "./Planification/CalendarPlanification";
 
 export const routesData = [
     {
@@ -58,6 +61,24 @@ export const routesData = [
         label: "Companies",
         path: "/companies",
         element: <CompaniesList />,
+        showInNav: true,
+    },
+    {
+        label: "Trainers",
+        path: "/trainers",
+        element: <TrainersList />,
+        showInNav: true,
+    },
+    {
+        label: "Trainings",
+        path: "/trainings",
+        element: <TrainingList />,
+        showInNav: true,
+    },
+    {
+        label: "Planification",
+        path: "/planification",
+        element: <CalendarPlanification />,
         showInNav: true,
     },
 ];

@@ -56,6 +56,8 @@ const CompanyForm: React.FC = () => {
             if (response.status === 201 || response.status === 200) {
                 // Add a message bofore doing something else
                  alert("Company saved successfully"); 
+                // Redirect to the previous Page
+                window.history.back();
             } 
             else { 
                 alert("Failed to save the trainer. Please try again."); 
@@ -65,10 +67,6 @@ const CompanyForm: React.FC = () => {
             alert(error);
         }
     };
-
-    const cancelOnClic = () =>{
-        navigate("/");
-    }
 
     return (
         <div>
@@ -146,7 +144,7 @@ const CompanyForm: React.FC = () => {
                     <button className="btn btn-primary" type="submit">
                         Save
                     </button>
-                    <button className="btn" type="button" onClick={cancelOnClic}>
+                    <button className="btn" type="button" onClick={() => window.history.back()}>
                         Cancel
                     </button>
                 

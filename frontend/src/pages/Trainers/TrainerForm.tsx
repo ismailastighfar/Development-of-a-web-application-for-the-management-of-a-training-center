@@ -2,8 +2,6 @@ import { TrainerData , SaveTrainer , UpdateTrainer, getTrainerById } from "../..
 import { ChangeEvent,FormEvent ,useState,useEffect } from "react";
 import { useParams,useNavigate} from 'react-router-dom';
 
-
-
   
 const TrainerForm: React.FC = () => {
 
@@ -58,6 +56,7 @@ const TrainerForm: React.FC = () => {
             if (response.status === 201 || response.status === 200) {
                 // Add a message bofore doing something else
                  alert("Trainer saved successfully"); 
+                 window.history.back();
             } 
             else { 
                 alert("Failed to save the trainer. Please try again."); 
@@ -67,10 +66,6 @@ const TrainerForm: React.FC = () => {
             alert(error);
         }
     };
-
-    const cancelOnClic = () =>{
-        navigate("/");
-    }
 
     return (
         <div>
@@ -174,7 +169,7 @@ const TrainerForm: React.FC = () => {
                 <   button className="btn btn-primary" type="submit">
                         Save
                     </button>
-                    <button className="btn" type="button" onClick={cancelOnClic}>
+                    <button className="btn" type="button" onClick={() => window.history.back()}>
                         Cancel
                     </button>
                 

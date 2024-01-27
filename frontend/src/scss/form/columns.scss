@@ -3,3 +3,17 @@
     grid-template-columns: 1fr 1fr; 
     gap: 20px; 
   }
+
+.section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.items-to-right{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 10px;
+}
