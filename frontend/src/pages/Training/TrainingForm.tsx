@@ -119,6 +119,8 @@ const handleCompanyDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
 
 const handleIsForCompanyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = event.target;
+    formData.companyId = null;
+    formData.trainerId = null;
     setFormData({
         ...formData,
         [name]: checked,
@@ -304,38 +306,43 @@ const handleSubmit = async (event: FormEvent) => {
                             onChange={handleIsForCompanyChange}
                         />
                     </div>
-                    {/* <div className="form-group">
-                        <label htmlFor="company">Company</label>
-                        <select 
-                            id="company"
-                            name="company"
-                            value={formData?.companyId+'' || ''} 
-                            onChange={handleCompanyDropdownChange} 
-                            required>
-                            <option value="0">  </option>
-                            {CompaniesList.map((dropdownItem) => (
-                                    <option key={dropdownItem.id} value={dropdownItem.id}>
-                                        {dropdownItem.name}
-                                    </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="company">Trainer</label>
-                        <select 
-                            id="company"
-                            name="company"
-                            value={formData.trainerId+'' || ''} 
-                            onChange={handleTrainerDropdownChange} 
-                            required>
-                            <option value="0">  </option>
-                            {TrainersList.map((dropdownItem) => (
-                                    <option key={dropdownItem.id} value={dropdownItem.id}>
-                                        {dropdownItem.name}
-                                    </option>
-                            ))}
-                        </select>
-                </div> */}
+                    {formData.forCompany && (
+                        <>
+                            <div className="form-group">
+                                <label htmlFor="company">Company</label>
+                                <select 
+                                    id="company"
+                                    name="company"
+                                    value={formData?.companyId+'' || ''} 
+                                    onChange={handleCompanyDropdownChange} 
+                                    required>
+                                    <option value="0">  </option>
+                                    {CompaniesList.map((dropdownItem) => (
+                                            <option key={dropdownItem.id} value={dropdownItem.id}>
+                                                {dropdownItem.name}
+                                            </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label htmlFor="company">Trainer</label>
+                                <select 
+                                    id="company"
+                                    name="company"
+                                    value={formData.trainerId+'' || ''} 
+                                    onChange={handleTrainerDropdownChange} 
+                                    required>
+                                    <option value="0">  </option>
+                                    {TrainersList.map((dropdownItem) => (
+                                            <option key={dropdownItem.id} value={dropdownItem.id}>
+                                                {dropdownItem.name}
+                                            </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </>
+                    )}
+
                 </div>  
             </form>
     );

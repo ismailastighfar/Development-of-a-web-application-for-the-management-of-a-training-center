@@ -86,6 +86,19 @@ export const getTrainingList = (page: number , size : number) => {
 
 }
 
+
+//get all trainings
+export const getAllTrainings = () => {
+
+    return API.get(`/trainings` , {headers}) 
+        .then((res) => res.data)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+
+}
+
 //get categories
 export const getCategories = () => {
 
@@ -97,3 +110,4 @@ export const getCategories = () => {
         });
 
 }
+

@@ -65,3 +65,9 @@ select {
 input[type = "checkbox"]{
     width: 25px;
 }
+
+.popup-content {
+    select ,input:not([type="checkbox"]) {
+        outline: 2px solid $color-primary;
+    }
+}

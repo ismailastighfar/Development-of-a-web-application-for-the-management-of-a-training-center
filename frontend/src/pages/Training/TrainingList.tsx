@@ -1,6 +1,6 @@
 import { TrainingData , getTrainingList} from "../../hooks/TraininAPI";
 import { PageResponse } from "../../Common/PageResponseAPI";
-import { ChangeEvent,FormEvent ,useState,useEffect , useRef } from "react";
+import { ChangeEvent,FormEvent ,useState, useEffect , useRef } from "react";
 import { useParams,useNavigate } from 'react-router-dom';
 
 
