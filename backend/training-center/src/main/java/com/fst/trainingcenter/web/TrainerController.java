@@ -1,6 +1,5 @@
 package com.fst.trainingcenter.web;
-;
-import com.fst.trainingcenter.dtos.IndividualDTO;
+
 import com.fst.trainingcenter.dtos.TrainerDTO;
 import com.fst.trainingcenter.dtos.TrainerRequestDTO;
 import com.fst.trainingcenter.dtos.TrainingDTO;
