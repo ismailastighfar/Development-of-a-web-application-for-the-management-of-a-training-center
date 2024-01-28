@@ -155,7 +155,8 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
         existingSession.setSessionStartTime(trainingSessionDTO.getSessionStartTime());
         existingSession.setSessionEndTime(trainingSessionDTO.getSessionEndTime());
         existingSession.setDuration(trainingSessionDTO.getDuration());
-
+        existingSession.setName(trainingSessionDTO.getName());
+        existingSession.setDescription(trainingSessionDTO.getDescription());
         TrainingSession updatedSession = trainingSessionRepository.save(existingSession);
 
         return mappers.fromTrainingSession(updatedSession);

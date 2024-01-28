@@ -8,6 +8,8 @@ import java.time.LocalTime;
 @Data
 public class TrainingSessionDTO {
     private Long id;
+    private String name;
+    private String description;
     private LocalDate sessionDate;
     private LocalTime sessionStartTime;
     private LocalTime sessionEndTime;
