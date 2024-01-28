@@ -7,6 +7,7 @@ import TrainingForm from "./Training/TrainingForm";
 import TrainersList from "./Trainers/TrainersList";
 import TrainingList from "./Training/TrainingList";
 import CalendarPlanification from "./Planification/CalendarPlanification";
+import TrainingSession from "../components/TrainingSession";
 
 export const routesData = [
     {
@@ -79,6 +80,16 @@ export const routesData = [
         label: "Planification",
         path: "/planification",
         element: <CalendarPlanification />,
+        showInNav: true,
+    },
+    {
+        // start : Date | undefined,
+        // end : Date | undefined,
+        // startTime : string | undefined,
+        // endTime : string
+        label: "Training Session",
+        path: "/trainingsession",
+        element: <TrainingSession trainingId={0} trainingSessionId={0} start={undefined} end={undefined} startTime={""} endTime={""} onSaveClicked={<></>}/>,
         showInNav: true,
     },
 ];
