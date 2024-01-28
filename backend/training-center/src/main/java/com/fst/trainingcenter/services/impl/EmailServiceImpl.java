@@ -3,6 +3,8 @@ package com.fst.trainingcenter.services.impl;
 
 import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
+import com.fst.trainingcenter.entities.Training;
+import com.fst.trainingcenter.entities.TrainingSession;
 import com.fst.trainingcenter.exceptions.IndividualNotFoundException;
 import com.fst.trainingcenter.exceptions.TrainingNotFoundException;
 import com.fst.trainingcenter.repositories.IndividualRepository;
@@ -134,6 +136,21 @@ public class EmailServiceImpl implements EmailService {
             }
         } else {
             logger.error("Unable to send the password reset email. User not found.");
+        }
+    }
+
+    @Override
+    public void sendEmailNewSession(Individual individual, Training training, TrainingSession trainingSession) {
+        String emailContent = EmailContentGenerator.getEmailSendSessionContent(individual,training,trainingSession);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
+            messageHelper.setTo(individual.getEmail());
+            messageHelper.setSubject("New Training Session Notification");
+            messageHelper.setText(emailContent, true);
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            logger.error("Error sending welcome email to trainer", e);
         }
     }
 }

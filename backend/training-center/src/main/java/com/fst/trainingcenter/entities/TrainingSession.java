@@ -15,6 +15,8 @@ import java.time.LocalTime;
 public class TrainingSession {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate sessionDate;
     @DateTimeFormat(pattern = "HH:mm")

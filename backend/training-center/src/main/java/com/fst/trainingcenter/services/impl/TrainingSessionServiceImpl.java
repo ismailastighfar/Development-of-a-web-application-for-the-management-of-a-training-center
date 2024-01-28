@@ -2,6 +2,7 @@ package com.fst.trainingcenter.services.impl;
 
 
 import com.fst.trainingcenter.dtos.TrainingSessionDTO;
+import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Training;
 import com.fst.trainingcenter.entities.TrainingSession;
 import com.fst.trainingcenter.exceptions.InvalidTrainingSessionException;
@@ -11,6 +12,7 @@ import com.fst.trainingcenter.exceptions.TrainingSessionNotFoundException;
 import com.fst.trainingcenter.mappers.MappersImpl;
 import com.fst.trainingcenter.repositories.TrainingRepository;
 import com.fst.trainingcenter.repositories.TrainingSessionRepository;
+import com.fst.trainingcenter.services.EmailService;
 import com.fst.trainingcenter.services.TrainingSessionService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
     private TrainingSessionRepository trainingSessionRepository;
     private TrainingRepository trainingRepository;
     private MappersImpl mappers;
+    private EmailService emailService;
 
     @Override
     public List<TrainingSessionDTO> getAllTrainingSessions() {
@@ -72,12 +75,22 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
             throw new InvalidTrainingSessionException("Session date must be on or after the training start date.");
         }
 
-        // Check if the time is already assigned to the same training at the same date
-        LocalTime newSessionTime = trainingSession.getSessionStartTime();
-        for (TrainingSession existingSession : associatedTraining.getTrainingSessions()) {
-            if (existingSession.getSessionDate().equals(trainingSession.getSessionDate()) &&
-                    existingSession.getSessionStartTime().equals(newSessionTime)) {
-                throw new InvalidTrainingSessionException("Time is already assigned to the same training at the same date.");
+        // Get the list of existing training sessions for the same training
+        List<TrainingSession> existingSessions = associatedTraining.getTrainingSessions();
+
+        LocalDate newSessionDate = trainingSessionDTO.getSessionDate();
+        LocalTime newSessionStartTime = trainingSessionDTO.getSessionStartTime();
+        LocalTime newSessionEndTime = trainingSessionDTO.getSessionEndTime();
+
+        // Check for overlapping time intervals on the same date
+        for (TrainingSession existingSession : existingSessions) {
+            if (existingSession.getSessionDate().equals(newSessionDate)) {
+                LocalTime existingStartTime = existingSession.getSessionStartTime();
+                LocalTime existingEndTime = existingSession.getSessionEndTime();
+
+                if (isOverlap(newSessionStartTime, newSessionEndTime, existingStartTime, existingEndTime)) {
+                    throw new InvalidTrainingSessionException("Time is overlapping with an existing session for the same training on the same date.");
+                }
             }
         }
 
@@ -87,7 +100,18 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
 
         TrainingSession trainingSessionSaved = trainingSessionRepository.save(trainingSession);
         associatedTraining.getTrainingSessions().add(trainingSessionSaved);
+
+       List<Individual> individuals =  associatedTraining.getIndividuals();
+        for (Individual individual : individuals) {
+          emailService.sendEmailNewSession(individual,associatedTraining,trainingSessionSaved);
+        }
+
         return mappers.fromTrainingSession(trainingSessionSaved);
+    }
+
+    // Helper method to check for overlapping time intervals
+    private boolean isOverlap(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+        return start1.isBefore(end2) && end1.isAfter(start2);
     }
 
     @Override
@@ -108,15 +132,19 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
         if (idexistingTraining != associatedTraining.getId()){
             existingSession.getTraining().getTrainingSessions().remove(existingSession);
             existingSession.setTraining(associatedTraining);
+
             // Check if the time is already assigned to the same training at the same date
-            LocalTime newSessionTime = trainingSessionDTO.getSessionStartTime();
+            LocalTime newSessionStartTime = trainingSessionDTO.getSessionStartTime();
+            LocalTime newSessionEndTime = trainingSessionDTO.getSessionEndTime();
+
             for (TrainingSession otherSession : associatedTraining.getTrainingSessions()) {
                 if (otherSession.getSessionDate().equals(trainingSessionDTO.getSessionDate()) &&
-                        otherSession.getSessionStartTime().equals(newSessionTime) &&
-                        !otherSession.getId().equals(existingSession.getId())) {
+                        !otherSession.getId().equals(existingSession.getId()) &&
+                        isOverlap(newSessionStartTime, newSessionEndTime, otherSession.getSessionStartTime(), otherSession.getSessionEndTime())) {
                     throw new InvalidTrainingSessionException("Time is already assigned to the same training at the same date.");
                 }
             }
+
             if (associatedTraining.getTrainingSessions().size() >= associatedTraining.getMaxSessions()) {
                 throw new MaximumSessionsReachedException("Maximum number of sessions reached for training.");
             }
@@ -127,7 +155,8 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
         existingSession.setSessionStartTime(trainingSessionDTO.getSessionStartTime());
         existingSession.setSessionEndTime(trainingSessionDTO.getSessionEndTime());
         existingSession.setDuration(trainingSessionDTO.getDuration());
-
+        existingSession.setName(trainingSessionDTO.getName());
+        existingSession.setDescription(trainingSessionDTO.getDescription());
         TrainingSession updatedSession = trainingSessionRepository.save(existingSession);
 
         return mappers.fromTrainingSession(updatedSession);

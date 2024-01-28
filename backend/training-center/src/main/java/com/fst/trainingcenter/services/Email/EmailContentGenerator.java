@@ -2,6 +2,8 @@ package com.fst.trainingcenter.services.Email;
 
 import com.fst.trainingcenter.entities.Individual;
 import com.fst.trainingcenter.entities.Trainer;
+import com.fst.trainingcenter.entities.Training;
+import com.fst.trainingcenter.entities.TrainingSession;
 import com.fst.trainingcenter.security.entities.AppUser;
 
 public class EmailContentGenerator {
@@ -105,6 +107,26 @@ public class EmailContentGenerator {
                 + "    <p>Sorry to hear you’re having trouble logging into <span>Training center</span><br><br>"
                 + "       We got a message that you forgot your password. If this was you, <br><br>"
                 + "       reset your password now using this token :" + token + "</p><br><br>"
+                + "    <div class='ntt'>© 2024 Training center </div>"
+                + "  </div>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+    }
+
+    public static  String getEmailSendSessionContent(Individual individual , Training training , TrainingSession trainingSession) {
+        return "<html>"
+                + "<body>"
+                + "<div class='container'>"
+                + "  <div class='text-container'>"
+                + "    <b>Hi " + individual.getNom() + " " + individual.getSurname() + ",</b><br>"
+                + "    <p>We're excited to inform you about a new training session for the training you enrolled in:</p>"
+                + "    <p><strong>Training Title:</strong> " + training.getTitle() + "</p>"
+                + "    <p><strong>Session Date:</strong> " + trainingSession.getSessionDate() + "</p>"
+                + "    <p><strong>Session start Time:</strong> " + trainingSession.getSessionStartTime() + "</p>"
+                + "    <p><strong>Session end Time:</strong> " + trainingSession.getSessionEndTime() + "</p>"
+                + "    <p>Please make sure to attend the session at the specified date and time. If you have any questions, feel free to reach out to us.</p>"
+                + "    <p>Thank you for choosing our Training Center!</p>"
                 + "    <div class='ntt'>© 2024 Training center </div>"
                 + "  </div>"
                 + "</div>"
