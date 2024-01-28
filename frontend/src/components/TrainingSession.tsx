@@ -1,16 +1,13 @@
-import { ChangeEvent, FormEvent, useState , useRef , useEffect} from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { TrainingSessionData } from "../hooks/TrainingSessionsAPI"
-import { TrainerData , getAllTrainers} from "../hooks/TrainerAPI";
-import { TrainingData , getTrainingById} from "../hooks/TraininAPI";
-import { DropdownData } from "../Common/CommonInterfaces";
 import React from "react";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
-const TrainingSession = (
+export interface TrainingSessionProps {
+    trainingSessiosData : TrainingSessionData,
+    onSaveClicked : any
+}
+
+export const TrainingSession = (
 
     // trainingSessionId : number | undefined,
     // start : Date | undefined,
@@ -18,57 +15,12 @@ const TrainingSession = (
     // startTime : string | undefined,
     // endTime : string | undefined,
 
-    {trainingId ,trainingSessionId, start, end, startTime, endTime , onSaveClicked} : {trainingId:number, trainingSessionId : number, start : Date | undefined, end : Date | undefined, startTime : string | undefined, endTime : string | undefined , onSaveClicked : any}
+    {trainingSessiosData , onSaveClicked} : {trainingSessiosData : TrainingSessionData , onSaveClicked : any}
 
 ) => {
 
-    const InitialFormData: TrainingSessionData = {
-        id: 0 ,
-        name: '',
-        description: '',
-        trainingSessionDate: '',
-        StartTime : '',
-        EndTime : '',
-        IsAllDay : false,
-        trainingId: 0,
-        trainerId: 0
-    };
 
-
-    const [formData, setFormData] = useState<TrainingSessionData>(InitialFormData);
-    const [trainers, setTrainers] = useState<DropdownData[]>([]);
-    const [trainings, setTrainings] = useState<DropdownData[]>([]);
-    const [open, setOpen] = useState(false);
-    const isDataFetched = useRef(false);
-
-    const fetchTrainings = async () => {
-        try {
-            const trainingsData = await getTrainingById(trainingId);
-            setTrainings(trainingsData.data.map((training: TrainingData) => ({
-                value: training.id,
-                name: training.title,
-            })));
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const fetchTrainers = async () => {
-        try {
-            const trainersData = await getAllTrainers();
-            setTrainers(trainersData.data.map((trainer: TrainerData) => ({
-                value: trainer.id,
-                name: trainer.nom,
-            })));
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const TogglePopup = () => {
-        setOpen(!open);
-    }
-
+    const [formData, setFormData] = useState<TrainingSessionData>(trainingSessiosData);
 
     // Handle form field changes
     const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -94,7 +46,7 @@ const TrainingSession = (
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault(); // Prevent the default form submission behavior
-        onSaveClicked();
+        onSaveClicked(formData);
     }
 
     const handleTrainerDropdownChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -104,24 +56,12 @@ const TrainingSession = (
             [name]: value,
         }));
     }
-        
-
-    useEffect(() => {
-
-        if (!isDataFetched.current) {
-
-            fetchTrainings();
-            fetchTrainers();
-            isDataFetched.current = true;
-        }
-    }, []);
-
 
     
     return (
         <form className="" onSubmit={handleSubmit}>
             <div className="section-header">
-                <h1>{trainingSessionId !== 0 ?"Training Session Details " : "New Training Session"}</h1>
+                <h1>{formData.id !== 0 ?"Training Session Details " : "New Training Session"}</h1>
                 <button
                     className="btn btn-primary"
                     type="submit">Save</button>
@@ -151,6 +91,19 @@ const TrainingSession = (
                         onChange={handleFormChange}
                         required={true}
                         disabled={false}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="trainingSessionDate">training Session Date</label>
+                    <input
+                        id="trainingSessionDate"
+                        name="trainingSessionDate"
+                        type="date"
+                        placeholder="Session Date"
+                        value={formData.trainingSessionDate}
+                        onChange={handleFormChange}
+                        required={true}
+                        disabled={true}
                     />
                 </div>
                 <div className="form-group">
@@ -190,27 +143,7 @@ const TrainingSession = (
                         disabled={formData?.IsAllDay}
                     />
                 </div>
-                <div>
-                    <label htmlFor="trainerId">Trainer</label>
-                    <select 
-                        id="trainerId"
-                        name="trainerId"
-                        value={formData.trainerId+'' || ''} 
-                        onChange={handleTrainerDropdownChange} 
-                        required>
-                        <option value="0">  </option>
-                        {trainers.map((dropdownItem) => (
-                                <option key={dropdownItem.value} value={dropdownItem.value}>
-                                    {dropdownItem.name}
-                                </option>
-                        ))}
-                    </select>
-                    </div>
-                </div> 
-                <div>
             </div>
          </form>
     );
 }
-
-export default TrainingSession;
