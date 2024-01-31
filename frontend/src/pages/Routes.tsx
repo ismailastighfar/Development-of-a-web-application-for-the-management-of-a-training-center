@@ -7,6 +7,8 @@ import TrainingForm from "./Training/TrainingForm";
 import TrainersList from "./Trainers/TrainersList";
 import TrainingList from "./Training/TrainingList";
 import CalendarPlanification from "./Planification/CalendarPlanification";
+import AssistantForm from "./assistante/AssistantceForm";
+import AssistantsList from "./assistante/AssistantesList";
 
 export const routesData = [
     {
@@ -61,6 +63,18 @@ export const routesData = [
         label: "Planification",
         path: "/planification/:Trainingid?",
         element: <CalendarPlanification />,
+        showInNav: false,
+    },
+    {
+        label: "Assistants",
+        path: "/assistants",
+        element: <AssistantsList />,
         showInNav: true,
+    },
+    {
+        label: "AssistantForm",
+        path: "/assistantform/:assistantId?",
+        element: <AssistantForm />,
+        showInNav: false,
     }
 ];

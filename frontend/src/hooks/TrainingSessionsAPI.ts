@@ -17,6 +17,8 @@ export interface TrainingSessionData {
 
 export interface TrainingSessionRequest {
     id:               number;
+    name:             string;
+    description:      string;
     sessionDate:      string;
     sessionStartTime: string;
     sessionEndTime:   string;
@@ -73,6 +75,8 @@ export const SetTrainingSessionsRequest = (trainingSessionData: TrainingSessionD
     
     const trainingSessionRequest: TrainingSessionRequest = {
         id: trainingSessionData.id,
+        name: trainingSessionData.name,
+        description: trainingSessionData.description,
         sessionDate: trainingSessionData.trainingSessionDate,
         sessionStartTime: trainingSessionData.StartTime,
         sessionEndTime: trainingSessionData.EndTime,

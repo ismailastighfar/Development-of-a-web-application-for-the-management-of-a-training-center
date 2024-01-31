@@ -10,6 +10,7 @@ import Popup from '../../components/Popup';
 import { TrainingSessionData , TrainingSessionRequest , SaveTrainingSessionsList , GetTrainingSessionsByTraining } from "../../hooks/TrainingSessionsAPI"
 import { TrainingData , getTrainingById } from '../../hooks/TraininAPI';
 import {TrainingSession} from '../../components/TrainingSession';
+import { info } from 'sass';
 
 
 const CalendarPlanification: React.FC = () => {
@@ -45,14 +46,14 @@ const CalendarPlanification: React.FC = () => {
       const event : EventInput = {
         id: trainingSession.id.toString(),
         IsNew: false,
-        title: "test"+trainingSession.id, 
+        title: trainingSession.name, 
         Startdate: trainingSession.sessionDate,
         start: `${trainingSession.sessionDate}T${trainingSession.sessionStartTime}` , 
-        end: `${trainingSession.sessionDate}T${trainingSession.sessionStartTime}`,
+        end: `${trainingSession.sessionDate}T${trainingSession.sessionEndTime}`,
         allDay: (trainingSession.sessionStartTime === "06:00:00" && trainingSession.sessionEndTime === "08:00:00"),
         startEventTime: trainingSession.sessionStartTime,
         endEventTime: trainingSession.sessionEndTime,
-        description: "Description " +trainingSession.id,
+        description: trainingSession.description,
       };
 
       eventsList.push(event);
@@ -62,10 +63,12 @@ const CalendarPlanification: React.FC = () => {
   }
 
   const fetchTriningData = async () => {
+
     const response = await getTrainingById(trainingId);
     setTrainingStartDate(response.endEnrollDate);
     setTrainingData(response);
     console.log("response.data.startDate", response.endEnrollDate);
+    
   }
 
   const isDataFetched = useRef(false);
@@ -81,38 +84,27 @@ const CalendarPlanification: React.FC = () => {
     }
   , []);
 
-  const handleEventClick = (infoData: EventInput) => {
-      const eventData = infoData.event;
-      console.log("info",eventData , eventData.extendedProps.description , eventData.id);
-      setTrainingSessionData({
-        ...trainingSessionData,
-        id: parseInt((eventData.id ? eventData.id : '0'), 10),
-        name: eventData.title || '',
-        description: eventData.extendedProps.description,
-        trainingSessionDate: eventData.extendedProps.Startdate,
-        StartTime : eventData.extendedProps.startEventTime,
-        EndTime : eventData.extendedProps.endEventTime,
-        IsAllDay : eventData.allDay || false,
-        trainingId: trainingId,
-      });
-      setIsOpenPopup(true);
+  const handleEventClick = (infoData: any) => {    
+    setTrainingSessionData(setSessionFromEvent(infoData.event));
+    setIsOpenPopup(true);
+
   }
   
   const handleSelect = (arg: any) => {
-    console.log("start date ",arg);
-    setTrainingSessionData({
-      ...trainingSessionData,
-      trainingSessionDate: arg.startStr,
-    });
+    setTrainingSessionData(setSessionFromEvent(arg));
     setIsOpenPopup(true);
+
   }
 
   const handleSaveOnClick = (SessionData:TrainingSessionData) => {
+
+    console.log(SessionData)
+
     const eventIndex = events.findIndex((event) => (event.id?.toString()) === (SessionData.id?.toString()));
     const newEvent : EventInput = 
       { 
         id: (SessionData.id !== 0 ? SessionData.id: events.length + 1).toString(),
-        IsNew: SessionData.id == 0,
+        IsNew: SessionData.id == 0 || SessionData.IsNew,
         title: SessionData.name, 
         Startdate: SessionData.trainingSessionDate,
         start: `${SessionData.trainingSessionDate}T${SessionData.StartTime}` , 
@@ -124,8 +116,9 @@ const CalendarPlanification: React.FC = () => {
       };
       console.log("newEvent", newEvent);  
       if(eventIndex !== -1){
-        events[eventIndex] = newEvent;
-        setEvents([...events]);
+        const updatedEvents = [...events];
+        updatedEvents[eventIndex] = newEvent;
+        setEvents(updatedEvents);
       }
       else
         setEvents([...events, newEvent]);
@@ -158,6 +151,24 @@ const CalendarPlanification: React.FC = () => {
       alert(error);
     }
     
+  }
+
+  const setSessionFromEvent = (arg: any) => {
+
+    const trainingSessionData : TrainingSessionData = {
+      id: (arg.id ? parseInt(arg.id, 10) : 0),
+      name: arg.title || '',
+      description: (arg.extendedProps? arg.extendedProps.description : ''),
+      trainingSessionDate: arg.startStr.split('T')[0],
+      StartTime : arg.startStr.split('T')[1].split('+')[0],
+      EndTime : arg.endStr.split('T')[1].split('+')[0],
+      IsAllDay : arg.allDay || false,
+      trainingId: trainingId,
+      IsNew: (arg.extendedProps? arg.extendedProps.IsNew : false),
+    };
+    console.log(trainingSessionData);
+    
+    return trainingSessionData;
   }
   
     return (

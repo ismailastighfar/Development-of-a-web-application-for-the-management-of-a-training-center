@@ -7,7 +7,7 @@ export interface TrainingData {
     city?: string;
     hours?: number | null;
     cost?: number | null ;
-    availableseats?: number | null;
+    availableSeats?: number | null;
     minSeats?: number | null;
     endEnrollDate?: string | null;
     maxSessions?: number | null;

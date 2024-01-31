@@ -22,7 +22,7 @@ const TrainingForm: React.FC = () => {
         city: '',
         hours: null,
         cost: null,
-        availableseats: 0,
+        availableSeats: null,
         minSeats: null,
         endEnrollDate: null,
         maxSessions: null,
@@ -54,7 +54,7 @@ const TrainingForm: React.FC = () => {
 
                     if(trainingId !== 0){
                         const response = await getTrainingById(trainingId);                        
-                        setFormData(response );
+                        setFormData(response);
                     }
 
                     const Companiesresponse = await getAllCompanies();
@@ -124,6 +124,8 @@ const handleIsForCompanyChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     const { name, checked } = event.target;
     formData.companyId = null;
     formData.trainerId = null;
+    formData.availableSeats = 0;
+    formData.minSeats = 0;
     setFormData({
         ...formData,
         [name]: checked,
@@ -282,7 +284,7 @@ const handleSubmit = async (event: FormEvent) => {
                             name="detailed_program"
                             type="text"
                             value={formData?.detailed_program}
-                            placeholder="objective"
+                            placeholder="detailed program"
                             onChange={handleFormChange}
                             required={true}
                             disabled={false}
@@ -315,6 +317,36 @@ const handleSubmit = async (event: FormEvent) => {
                             onChange={handleIsForCompanyChange}
                         />
                     </div>
+                    {!formData.forCompany && (
+                        <>
+                             <div className="form-group">
+                                <label htmlFor="availableSeats">Available seats</label>
+                                <input
+                                    id="availableSeats"
+                                    name="availableSeats"
+                                    type="number"
+                                    value={formData.availableSeats===null || formData.availableSeats==0?'':formData.availableSeats}
+                                    placeholder="available seats"
+                                    onChange={handleFormChange}
+                                    required={!formData.forCompany}
+                                    disabled={false}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="minSeats">Minimum seats</label>
+                                <input
+                                    id="minSeats"
+                                    name="minSeats"
+                                    type="number"
+                                    value={formData.minSeats===null || formData.minSeats==0?'':formData.minSeats}
+                                    placeholder="minimum seats to start"
+                                    onChange={handleFormChange}
+                                    required={!formData.forCompany}
+                                    disabled={false}
+                                />
+                            </div>
+                        </>
+                        )}
                     {formData.forCompany && (
                         <>
                             <div className="form-group">
