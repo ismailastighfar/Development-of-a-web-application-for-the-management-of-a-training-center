@@ -72,8 +72,6 @@ public class AssistantServiceImpl implements AssistantService {
         existingAssistant.setSurname(assistantDTO.getSurname());
         existingAssistant.setEmail(assistantDTO.getEmail());
         existingAssistant.setPhone(assistantDTO.getPhone());
-        String password = assistantDTO.getPassword();
-        existingAssistant.setPassword(passwordEncoder.encode(password));
         return mappers.fromAssistant(existingAssistant);
     }
 

@@ -135,12 +135,9 @@ public class TrainerServiceImpl implements TrainerService {
         existTrainer.setSurname(trainer.getSurname());
         existTrainer.setEmail(trainer.getEmail());
         existTrainer.setPhone(trainer.getPhone());
-        String password = trainer.getPassword();
-        existTrainer.setPassword(passwordEncoder.encode(password));
         existTrainer.setKeywords(trainer.getKeywords());
         existTrainer.setDescription(trainer.getDescription());
-        Trainer savedTrainer = trainerRepository.save(existTrainer);
-        return mappers.fromTrainer(savedTrainer);
+        return mappers.fromTrainer(existTrainer);
     }
 
     @Override
