@@ -7,6 +7,8 @@ import { useParams,useNavigate } from 'react-router-dom';
 
 const TrainingForm: React.FC = () => {
 
+    const navigate = useNavigate();
+
     const { id } = useParams<{ id?: string }>();
 
     interface DropdownData {
@@ -20,15 +22,16 @@ const TrainingForm: React.FC = () => {
         city: '',
         hours: null,
         cost: null,
-        availableseats: 0,
-        startDate: null,
+        availableSeats: null,
+        minSeats: null,
+        endEnrollDate: null,
         maxSessions: null,
         objectives: '',
         detailed_program: '',
         category: '',
         forCompany: false,
-        trainerId: null,
-        companyId: null,
+        trainerId: 0,
+        companyId: 0,
       };
     
 
@@ -51,7 +54,7 @@ const TrainingForm: React.FC = () => {
 
                     if(trainingId !== 0){
                         const response = await getTrainingById(trainingId);                        
-                        setFormData(response );
+                        setFormData(response);
                     }
 
                     const Companiesresponse = await getAllCompanies();
@@ -121,6 +124,8 @@ const handleIsForCompanyChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     const { name, checked } = event.target;
     formData.companyId = null;
     formData.trainerId = null;
+    formData.availableSeats = 0;
+    formData.minSeats = 0;
     setFormData({
         ...formData,
         [name]: checked,
@@ -173,9 +178,15 @@ const handleSubmit = async (event: FormEvent) => {
             <form className="" onSubmit={handleSubmit}>
                 <div className="section-header">
                     <h1>{trainingId !== 0 ?"Training Details " : "New Training"}</h1>
-                    <button
-                        className="btn btn-primary"
-                        type="submit">Save</button>
+                    {trainingId !== 0 &&(
+                        <div>
+                            <button 
+                                className="btn"
+                                type="button"
+                                onClick={() => {navigate(`/planification/${trainingId}`)}}> Planification</button>
+                            
+                        </div>
+                    )}
                 </div>
                 <div className="two-columns">
                     <div className="form-group">
@@ -230,12 +241,12 @@ const handleSubmit = async (event: FormEvent) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="startDate">Start date</label>
+                        <label htmlFor="endEnrollDate">End Enroll Date</label>
                         <input
-                            id="startDate"
-                            name="startDate"
+                            id="endEnrollDate"
+                            name="endEnrollDate"
                             type="date"
-                            value={formData.startDate ? formData.startDate+'': ''}
+                            value={formData.endEnrollDate ? formData.endEnrollDate+'': ''}
                             placeholder="start date"
                             onChange={handleStartDateChange}
                             required
@@ -273,7 +284,7 @@ const handleSubmit = async (event: FormEvent) => {
                             name="detailed_program"
                             type="text"
                             value={formData?.detailed_program}
-                            placeholder="objective"
+                            placeholder="detailed program"
                             onChange={handleFormChange}
                             required={true}
                             disabled={false}
@@ -306,16 +317,46 @@ const handleSubmit = async (event: FormEvent) => {
                             onChange={handleIsForCompanyChange}
                         />
                     </div>
+                    {!formData.forCompany && (
+                        <>
+                             <div className="form-group">
+                                <label htmlFor="availableSeats">Available seats</label>
+                                <input
+                                    id="availableSeats"
+                                    name="availableSeats"
+                                    type="number"
+                                    value={formData.availableSeats===null || formData.availableSeats==0?'':formData.availableSeats}
+                                    placeholder="available seats"
+                                    onChange={handleFormChange}
+                                    required={!formData.forCompany}
+                                    disabled={false}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="minSeats">Minimum seats</label>
+                                <input
+                                    id="minSeats"
+                                    name="minSeats"
+                                    type="number"
+                                    value={formData.minSeats===null || formData.minSeats==0?'':formData.minSeats}
+                                    placeholder="minimum seats to start"
+                                    onChange={handleFormChange}
+                                    required={!formData.forCompany}
+                                    disabled={false}
+                                />
+                            </div>
+                        </>
+                        )}
                     {formData.forCompany && (
                         <>
                             <div className="form-group">
-                                <label htmlFor="company">Company</label>
+                                <label htmlFor="companyId">Company</label>
                                 <select 
-                                    id="company"
-                                    name="company"
+                                    id="companyId"
+                                    name="companyId"
                                     value={formData?.companyId+'' || ''} 
                                     onChange={handleCompanyDropdownChange} 
-                                    required>
+                                    required = {true}>
                                     <option value="0">  </option>
                                     {CompaniesList.map((dropdownItem) => (
                                             <option key={dropdownItem.id} value={dropdownItem.id}>
@@ -325,13 +366,13 @@ const handleSubmit = async (event: FormEvent) => {
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="company">Trainer</label>
+                                <label htmlFor="trainerId">Trainer</label>
                                 <select 
-                                    id="company"
-                                    name="company"
+                                    id="trainerId"
+                                    name="trainerId"
                                     value={formData.trainerId+'' || ''} 
                                     onChange={handleTrainerDropdownChange} 
-                                    required>
+                                    required = {true}>
                                     <option value="0">  </option>
                                     {TrainersList.map((dropdownItem) => (
                                             <option key={dropdownItem.id} value={dropdownItem.id}>
@@ -342,7 +383,15 @@ const handleSubmit = async (event: FormEvent) => {
                             </div>
                         </>
                     )}
-
+                    <div>
+                        <button
+                                className="btn btn-primary"
+                                type="submit">Save</button>
+                        <button
+                                className="btn"
+                                type="button"
+                                onClick={() => {window.history.back()}}>Cancel</button>
+                    </div>
                 </div>  
             </form>
     );

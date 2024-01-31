@@ -37,19 +37,19 @@ const TrainerForm: React.FC = () => {
         }
     }, [trainerId]);
     
-    
+    // Handle form field changes
+    const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target
 
-     // Handle form field changes
-     const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-
-            setFormData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+       
     };
 
-    const handleSubmit = async (event: FormEvent) => {
+  
+      const handleSubmit = async (event: FormEvent) => {
         event.preventDefault(); // Prevent the default form submission behavior
         try{
             const response = (trainerId == 0 ? await SaveTrainer(formData) : await UpdateTrainer(formData));
@@ -67,6 +67,10 @@ const TrainerForm: React.FC = () => {
         }
     };
 
+    const handleSearchonBlur = async (event: ChangeEvent<HTMLInputElement>) => {
+        console.log("start Searching from enblue");
+    }
+
     return (
         <div>
             <h1>{trainerId !== 0 ?"Trainer Details " : "New Trainer"}</h1>
@@ -81,6 +85,7 @@ const TrainerForm: React.FC = () => {
                             placeholder="Name"
                             value={formData?.nom}
                             onChange={handleFormChange}
+                            onBlur={handleSearchonBlur}
                             required={true}
                             disabled={false}
                         />

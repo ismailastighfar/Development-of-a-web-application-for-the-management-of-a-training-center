@@ -7,7 +7,8 @@ import TrainingForm from "./Training/TrainingForm";
 import TrainersList from "./Trainers/TrainersList";
 import TrainingList from "./Training/TrainingList";
 import CalendarPlanification from "./Planification/CalendarPlanification";
-import TrainingSession from "../components/TrainingSession";
+import AssistantForm from "./assistante/AssistantceForm";
+import AssistantsList from "./assistante/AssistantesList";
 
 export const routesData = [
     {
@@ -24,37 +25,19 @@ export const routesData = [
     },
     {
         label: "Trainer Detail",
-        path: "/trainerdetail/:id",
-        element: <TrainerForm />,
-        showInNav: false,
-    },
-    {
-        label: "Trainer Detail",
-        path: "/trainerdetail",
+        path: "/trainerdetail/:id?",
         element: <TrainerForm />,
         showInNav: false,
     },
     {
         label: "Company Detail",
-        path: "/companydetail/:id",
-        element: <CompanyForm />,
-        showInNav: false,
-    },
-    {
-        label: "Company Detail",
-        path: "/companydetail",
+        path: "/companydetail/:id?",
         element: <CompanyForm />,
         showInNav: false,
     },
     {
         label: "Training Detail",
-        path: "/trainingdetail/:id",
-        element: <TrainingForm />,
-        showInNav: false,
-    },
-    {
-        label: "Training Detail",
-        path: "/trainingdetail",
+        path: "/trainingdetail/:id?",
         element: <TrainingForm />,
         showInNav: false,
     },
@@ -78,18 +61,20 @@ export const routesData = [
     },
     {
         label: "Planification",
-        path: "/planification",
+        path: "/planification/:Trainingid?",
         element: <CalendarPlanification />,
+        showInNav: false,
+    },
+    {
+        label: "Assistants",
+        path: "/assistants",
+        element: <AssistantsList />,
         showInNav: true,
     },
     {
-        // start : Date | undefined,
-        // end : Date | undefined,
-        // startTime : string | undefined,
-        // endTime : string
-        label: "Training Session",
-        path: "/trainingsession",
-        element: <TrainingSession trainingId={0} trainingSessionId={0} start={undefined} end={undefined} startTime={""} endTime={""} onSaveClicked={<></>}/>,
-        showInNav: true,
-    },
+        label: "AssistantForm",
+        path: "/assistantform/:assistantId?",
+        element: <AssistantForm />,
+        showInNav: false,
+    }
 ];

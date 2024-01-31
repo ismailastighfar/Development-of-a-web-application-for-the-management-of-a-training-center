@@ -7,8 +7,9 @@ export interface TrainingData {
     city?: string;
     hours?: number | null;
     cost?: number | null ;
-    availableseats?: number | null;
-    startDate?: Date | null;
+    availableSeats?: number | null;
+    minSeats?: number | null;
+    endEnrollDate?: string | null;
     maxSessions?: number | null;
     objectives?: string;
     detailed_program?: string;
@@ -63,7 +64,7 @@ export const getTrainingById = (id: number) => {
 //Assign training to trainer and company
 export const AssignTrainingToCompany = (trainingId : number , trainerId : number , companyId : number ) => {
 
-    return API.post(`/trainings/${trainerId}/assign/company/${companyId}/trainer/${trainingId}` , {headers})
+    return API.post(`/trainings/${trainingId}/assign/company/${companyId}/trainer/${trainerId}` , {headers})
         .then((res) => res)
         .catch((error) => {
             const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
@@ -110,4 +111,5 @@ export const getCategories = () => {
         });
 
 }
+
 
