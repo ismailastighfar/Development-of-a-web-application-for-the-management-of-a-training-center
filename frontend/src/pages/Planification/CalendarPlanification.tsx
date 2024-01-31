@@ -84,13 +84,14 @@ const CalendarPlanification: React.FC = () => {
     }
   , []);
 
-  const handleEventClick = (infoData: any) => {    
+  const handleEventClick = (infoData: any) => {  
     setTrainingSessionData(setSessionFromEvent(infoData.event));
     setIsOpenPopup(true);
 
   }
   
   const handleSelect = (arg: any) => {
+    console.log(arg);  
     setTrainingSessionData(setSessionFromEvent(arg));
     setIsOpenPopup(true);
 
@@ -153,6 +154,12 @@ const CalendarPlanification: React.FC = () => {
     
   }
 
+  const getTimeFromDate = (date: string) => {
+
+    return date.split('T')[1]?.split('+')[0] || '';
+
+  }
+
   const setSessionFromEvent = (arg: any) => {
 
     const trainingSessionData : TrainingSessionData = {
@@ -160,8 +167,8 @@ const CalendarPlanification: React.FC = () => {
       name: arg.title || '',
       description: (arg.extendedProps? arg.extendedProps.description : ''),
       trainingSessionDate: arg.startStr.split('T')[0],
-      StartTime : arg.startStr.split('T')[1].split('+')[0],
-      EndTime : arg.endStr.split('T')[1].split('+')[0],
+      StartTime : getTimeFromDate(arg.startStr),
+      EndTime : getTimeFromDate(arg.endStr),
       IsAllDay : arg.allDay || false,
       trainingId: trainingId,
       IsNew: (arg.extendedProps? arg.extendedProps.IsNew : false),

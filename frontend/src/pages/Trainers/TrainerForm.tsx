@@ -129,19 +129,21 @@ const TrainerForm: React.FC = () => {
                             disabled={false}
                         />
                     </div>
-                    <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={formData?.password}
-                        placeholder="Password"
-                        onChange={handleFormChange}
-                        required
-                        autoComplete="new-password"
-                    />
-                </div>
+                    {trainerId === 0 && (
+                        <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            value={formData?.password}
+                            placeholder="Password"
+                            onChange={handleFormChange}
+                            required={true}
+                            autoComplete="new-password"
+                        />
+                    </div>
+                    )}
                     <div className="form-group sign-up-input">
                         <label htmlFor="keywords">Keywords</label>
                         <input

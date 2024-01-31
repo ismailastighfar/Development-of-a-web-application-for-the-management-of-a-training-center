@@ -73,7 +73,7 @@ export const routesData = [
     },
     {
         label: "AssistantForm",
-        path: "/assistantform/:assistantId?",
+        path: "/assistantform/:id?",
         element: <AssistantForm />,
         showInNav: false,
     }
