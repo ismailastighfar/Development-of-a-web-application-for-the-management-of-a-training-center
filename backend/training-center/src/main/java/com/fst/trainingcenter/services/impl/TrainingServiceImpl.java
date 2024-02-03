@@ -167,7 +167,7 @@ public class TrainingServiceImpl implements TrainingService {
             List<Predicate> predicates = new ArrayList<>();
 
             if (category != null) {
-                predicates.add(builder.like(root.get("category"), "%" + category + "%"));
+                predicates.add(builder.equal(root.get("category"),  category));
             }
 
             if (city != null && !city.isEmpty()) {
@@ -176,7 +176,7 @@ public class TrainingServiceImpl implements TrainingService {
 
             if (endEnrollDate != null && !endEnrollDate.isEmpty()) {
                 LocalDate parsedDate = LocalDate.parse(endEnrollDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                predicates.add(builder.like(root.get("startDate"), "%" + parsedDate + "%"));
+                predicates.add(builder.like(root.get("endEnrollDate"), "%" + parsedDate + "%"));
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));

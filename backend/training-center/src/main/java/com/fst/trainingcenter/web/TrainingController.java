@@ -110,9 +110,9 @@ public class TrainingController {
     public ResponseEntity<Page<TrainingDTO>> searchTrainings(
             @RequestParam(required = false) Category category,
             @RequestParam(required = false) String city,
-            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endEnrollDate,
             @PageableDefault(size = 10) Pageable pageable) {
-        Page<TrainingDTO> result = trainingService.searchTrainings(category, city, startDate, pageable);
+        Page<TrainingDTO> result = trainingService.searchTrainings(category, city, endEnrollDate, pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
