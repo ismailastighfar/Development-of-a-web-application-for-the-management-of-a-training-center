@@ -5,6 +5,9 @@ export interface CardData {
     content: string;
     const : string;
     hours : string;
+    category : string;
+    city : string;
+    endEntrollData : string;
     SubmitOnClick : any;
 }
 
@@ -17,8 +20,17 @@ export const Card = (cardData:CardData) => {
             <div className='card__content'>
                 <p className='card__content-front'>{ cardData.content }</p>
                 <div className='card_external_data'>
-                    <p>{ cardData.const } (DH)</p>
-                    <p>{ cardData.hours } Hour</p>
+                    <div className='card__external_line'>
+                        <p>Cost : { cardData.const } (DH)</p>
+                        <p>Duratoin : { cardData.hours } Hour</p>
+                    </div>
+                    <div className='card__external_line'>
+                        <p>Category : { cardData.category }</p>
+                        <p>City : { cardData.city }</p>
+                    </div>
+                    <div className='card__external_line'>
+                        <p>End Entroll Data : { cardData.endEntrollData }</p>
+                    </div>
                 </div>
                 <div className='card__button'>
                 <button className='btn btn-primary' onClick={cardData.SubmitOnClick}>Enroll</button>

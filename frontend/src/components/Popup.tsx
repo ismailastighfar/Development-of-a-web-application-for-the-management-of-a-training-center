@@ -10,14 +10,14 @@ interface PopupPlaceHolders {
     Content: ReactNode;
     Actions: ReactNode;
     IsOpen: boolean;
+    IsBigPopup?: boolean | true;
     OnClose: any;
   }
 
-const Popup : React.FC<PopupPlaceHolders> = ({ Header , Content , Actions , IsOpen , OnClose}) => {
-
+const Popup : React.FC<PopupPlaceHolders> = ({ Header , Content , Actions , IsOpen , IsBigPopup = false , OnClose}) => {
 
     return (
-        <Dialog open={IsOpen} onClose={OnClose} fullWidth maxWidth="xl">
+        <Dialog open={IsOpen} onClose={OnClose} fullWidth maxWidth={IsBigPopup?'xl':'sm'}  >
             <DialogTitle>{Header}</DialogTitle>
             <DialogContent className='popup-content'>
                 {Content}

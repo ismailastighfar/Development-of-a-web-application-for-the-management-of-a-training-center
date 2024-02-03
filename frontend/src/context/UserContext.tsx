@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, FC } from "react";
+import { createContext, useContext, useState, ReactNode, FC} from "react";
 import { UserData } from "../hooks/UserAPI";
 
 interface AuthContextProps {
@@ -19,6 +19,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     const logout = () => {
         setUser(null);
+        console.log('logout' , user);
         // You may also want to clear the persisted user data
     };
 

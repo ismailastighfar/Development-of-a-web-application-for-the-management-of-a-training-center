@@ -2,21 +2,20 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     padding: 20px;
-    background-color: var(--color-white);
+    background-color: $color-white;
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    text-align: center;
     position: relative;
-    max-width: 500px;
+    max-width: 800px;
   }
   
   .card__title {
     font-weight: 600;
+    align-self: center;
     font-size: 28px;
-    color: var(--color-primary);
-    margin-bottom: 15px;
+    color: $color-primary;
+    margin-bottom: 20px;
   }
   
   .card__content {
@@ -25,7 +24,7 @@
   }
   
   .card__content-front {
-    color: var(--color-dark);
+    color: $color-dark-1;
   }
   
   .loading {
@@ -39,64 +38,28 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  
-  .card.rotated:hover {
-    background-color: var(--color-secondary);
-  }
-  
-  .card.rotated:hover .card__title,
-  .card.rotated:hover .card__content-front,
-  .card.rotated.export .card__title,
-  .card.rotated.export .card__content-front {
-    opacity: 0;
-  }
-  
-  .card.rotated.export .card__content-back {
-    color: var(--color-dark);
-  }
-  
-  .card__content-back {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    overflow: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-  }
-  
-  .card.rotated:hover .card__content-back,
-  .card.rotated.export .card__content-back {
-    opacity: 1;
-  }
-  
-  .card__content-share {
-    color: var(--color-grey);
-    font-size: 14px;
-    font-weight: 400;
-    position: absolute;
-    right: 15px;
-    top: 5px;
-    cursor: pointer;
-    transition: all 0.1s;
-  }
-  
-  .card__content-share:hover {
-    color: var(--color-primary);
-  }
+
 
   .card_external_data {
     margin-top: 30px;
     display: flex;
+    flex-direction: column;
     align-items: center;   
+    gap: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    color: $color-dark-1;
+  }
+
+  .card__external_line{
+    width: 100%;
+    display: flex;
+    align-items: center;
     justify-content: space-between;
     font-weight: bold;
   }
+
+
 
   .card__button{
     margin-top: 30px;
