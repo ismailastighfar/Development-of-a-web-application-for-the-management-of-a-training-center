@@ -24,7 +24,7 @@ public interface TrainingService {
     TrainingDTO enrollIndividual(Long idIndividual,Long idTraining) throws IndividualNotFoundException, TrainingNotFoundException, NoAvailableSeatsException, IndividualAlreadyEnrolledException, IndividualTrainingException;
 
     TrainingDTO cancelEnrollment(Long idIndividual, Long idTraining) throws IndividualNotFoundException, TrainingNotFoundException, CancelEnrollmentException;
-    Page<TrainingDTO> searchTrainings(Category category, String city, String startDate, Pageable pageable);
+    Page<TrainingDTO> searchTrainings(Category category, String city, String endEnrollDate, Pageable pageable);
 
     TrainingDTO assignCompanyAndTrainer(Long trainingId,Long companyId , Long trainerId) throws TrainingNotFoundException, TrainerNotFoundException, CompanyNotFoundException, TrainingNotForCompanyException;
     TrainingDTO assignTrainerToIndividuals(Long trainingId,Long trainerId) throws TrainingNotFoundException, TrainerNotFoundException, NotEnoughIndividualsException, TrainingNotForCompanyException;
