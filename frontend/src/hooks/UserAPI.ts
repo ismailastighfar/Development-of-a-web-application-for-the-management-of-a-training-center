@@ -1,11 +1,14 @@
 import API from "../API"
+import { useAuth } from "../context/UserContext";
+
 export interface UserData {
+    id: number;
     nom?: string;
     surname?: string;
-    phone: string;
-    password: string;
-    email: string;
-    dateOfBirth:string;
+    phone?: string;
+    password?: string;
+    email?: string;
+    dateOfBirth?:string;
 
 }
 
@@ -43,6 +46,17 @@ export const logIn = (userData: UserData) => {
     };
 
 
+// export interface UserData {
+//   id: number;
+//   nom?: string;
+//   surname?: string;
+//   phone: string;
+//   password: string;
+//   email: string;
+//   dateOfBirth:string;
+
+// }
+
     const loginData = {
         "email":userData.email,
         "password":userData.password
@@ -56,6 +70,7 @@ export const logIn = (userData: UserData) => {
       saveAuthToken('refreshToken', authResponse['refresh-token']);
       saveAuthToken('accessToken', authResponse['access-token']);
       saveAuthToken('userId', authResponse.id);
+      console.log(res.data);
       return res;
     })
     .catch((error) => {

@@ -21,3 +21,34 @@ export const GetTrainingList =  (trainingPage: TrainingPage) => {
         });
 }
 
+
+//Enroll to Training
+export const EnrollToTraining = (trainingId: number , IndividualId: number) => {
+    return API.post(`/trainings/individual/${IndividualId}/enroll/${trainingId}`)
+        .then((res) => res.data)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+}
+
+//Get Tranings of an Individual
+export const GetIndividualTrainings = (individualId: number) => {
+    return API.get(`/individuals/${individualId}/trainings`)
+        .then((res) => res.data)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+}
+
+//Cancel Enroll to Training
+export const CancelEnrollToTraining = (trainingId: number , IndividualId: number) => {
+    return API.post(`/trainings/individual/${IndividualId}/enroll/cancel/${trainingId}`)
+        .then((res) => res.data)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+}
+

@@ -8,7 +8,8 @@ export interface CardData {
     category : string;
     city : string;
     endEntrollData : string;
-    SubmitOnClick : any;
+    actions?: any;
+    SubmitOnClick?: any;
 }
 
 export const Card = (cardData:CardData) => {
@@ -33,7 +34,9 @@ export const Card = (cardData:CardData) => {
                     </div>
                 </div>
                 <div className='card__button'>
-                <button className='btn btn-primary' onClick={cardData.SubmitOnClick}>Enroll</button>
+                 {cardData.actions ? cardData.actions : 
+                     <button className='btn btn-primary' onClick={cardData.SubmitOnClick}>Enroll</button>
+                 }
             </div>
             </div>
         </div>

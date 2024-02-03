@@ -4,21 +4,25 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { EventInput } from '@fullcalendar/core/index.js';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useParams } from 'react-router-dom';
+import { json, useParams } from 'react-router-dom';
 import { useState , useEffect , useRef } from "react";
 import Popup from '../../components/Popup';
 import { TrainingSessionData , TrainingSessionRequest , SaveTrainingSessionsList , GetTrainingSessionsByTraining } from "../../hooks/TrainingSessionsAPI"
 import { TrainingData , getTrainingById } from '../../hooks/TraininAPI';
 import {TrainingSession} from '../../components/TrainingSession';
-import { info } from 'sass';
 
+interface CalendarPlanificationProps {
 
-const CalendarPlanification: React.FC = () => {
+    training_Id?: number;
+    IsEditMode?: boolean;
+}
+
+const CalendarPlanification: React.FC<CalendarPlanificationProps> = ({training_Id = 0 , IsEditMode = true}) => {
 
   const { Trainingid } = useParams<{ Trainingid?: string }>();
   const [trainingStartDate, setTrainingStartDate] = useState<string>('');
   const [trainingData, setTrainingData] = useState<TrainingData>();
-  const trainingId : number = Trainingid ? parseInt(Trainingid, 10) : 0; 
+  const trainingId : number = Trainingid ? parseInt(Trainingid, 10) : training_Id; 
   console.log("trainingId", trainingId);
 
   const [trainingSessionData, setTrainingSessionData] = useState<TrainingSessionData>({
@@ -177,6 +181,22 @@ const CalendarPlanification: React.FC = () => {
     
     return trainingSessionData;
   }
+
+  const customButtonsData = {
+    saveEvent: {
+      text: "Save Sessions",
+      click: function() {
+        handleSaveEvents();
+      }
+    },
+    back: {
+      text: "Back",
+      click: function() {
+        window.history.back();
+      }
+    }
+  };
+  
   
     return (
         <>
@@ -184,9 +204,9 @@ const CalendarPlanification: React.FC = () => {
             plugins={[ dayGridPlugin, interactionPlugin , timeGridPlugin]}
             initialView="dayGridMonth"
             headerToolbar={{
-                left: 'back prev,next today',
+                left: `${IsEditMode ? 'back ' : ''}prev,next today`,
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay saveEvent',
+                right: `dayGridMonth,timeGridWeek,timeGridDay${IsEditMode ? ' saveEvent' : ''}`,
               }}
             validRange={{
                 start: trainingStartDate, // Set the minimum date
@@ -194,37 +214,25 @@ const CalendarPlanification: React.FC = () => {
             firstDay={1}
             height={900}
             events={events}
-            customButtons={{
-              saveEvent: {
-                text: "Save Sessions",
-                click: function() {
-                  handleSaveEvents();
-                }
-              },
-              back: {
-                text: "Back",
-                click: function() {
-                  window.history.back();
-                }
-              }
-            }}
-            eventStartEditable={true}
-            eventDurationEditable={true}
+            customButtons={IsEditMode ? customButtonsData : {}}
+            eventStartEditable={IsEditMode}
+            eventDurationEditable={IsEditMode}
             displayEventEnd={true}
-            editable={true}
-            droppable={true}
+            editable={IsEditMode}
+            droppable={IsEditMode}
             slotMinTime={"06:00:00"}
             slotMaxTime={"23:00:00"}
-            selectable={true}
+            selectable={IsEditMode}
             dayMaxEventRows={true}
             select={handleSelect}
             // eventDragStop={(arg) => console.log(arg)}
             eventDrop={(arg) => console.log(arg.event.start)}
-            eventClick={handleEventClick}
+            eventClick={IsEditMode ? handleEventClick : undefined} // Conditionally set eventClick based on IsEditMode
           />
             {IsOpenPopup && (
               <Popup Header={<></>}
               Content={<TrainingSession trainingSessiosData={trainingSessionData} onSaveClicked={handleSaveOnClick}/>} 
+              IsBigPopup={true}
               Actions={<></>} 
               IsOpen={true} OnClose={() => setIsOpenPopup(false)} />
             )}

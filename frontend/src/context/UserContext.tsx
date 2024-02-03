@@ -10,17 +10,23 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<UserData | null>(null);
+    const [user, setUser] = useState<UserData | null>(
+        () => {
+            // Initialize user state from localStorage if available
+            const storedUser = localStorage.getItem("user");
+            return storedUser ? JSON.parse(storedUser) : null;
+        });
 
     const login = (userData: UserData) => {
         setUser(userData);
         // You may also want to persist the user data (e.g., in localStorage)
+        localStorage.setItem("user", JSON.stringify(userData));
     };
 
     const logout = () => {
         setUser(null);
-        console.log('logout' , user);
-        // You may also want to clear the persisted user data
+        // Remove user data from localStorage on logout
+        localStorage.removeItem("user");
     };
 
     const contextValue: AuthContextProps = {

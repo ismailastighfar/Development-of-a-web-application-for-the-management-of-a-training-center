@@ -14,6 +14,7 @@ const Form = ({
     const { login } = useAuth();
 
     const initialFormData: UserData = {
+        id: 0,
         nom: "",
         surname: "",
         phone: "",
@@ -66,7 +67,9 @@ const Form = ({
                 const response = await logIn(formData);
                 console.log("Status is " + response.status);
                 if (response.status === 200) {
-                    login(formData);
+                    const userData = formData;
+                    userData.id = parseInt(response.data.id);
+                    login(userData);
                     //Show some message before moving to other page
                     navigate("/");
                 }

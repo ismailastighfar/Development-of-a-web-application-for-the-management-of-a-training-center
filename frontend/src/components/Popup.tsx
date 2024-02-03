@@ -6,9 +6,9 @@ import React , { ReactNode } from 'react';
 
 
 interface PopupPlaceHolders {
-    Header: ReactNode;
+    Header?: ReactNode;
     Content: ReactNode;
-    Actions: ReactNode;
+    Actions?: ReactNode;
     IsOpen: boolean;
     IsBigPopup?: boolean | true;
     OnClose: any;
@@ -18,13 +18,17 @@ const Popup : React.FC<PopupPlaceHolders> = ({ Header , Content , Actions , IsOp
 
     return (
         <Dialog open={IsOpen} onClose={OnClose} fullWidth maxWidth={IsBigPopup?'xl':'sm'}  >
-            <DialogTitle>{Header}</DialogTitle>
+            {Header &&
+                <DialogTitle>{Header}</DialogTitle>
+            }
             <DialogContent className='popup-content'>
                 {Content}
             </DialogContent>
-            <DialogActions>
-                {Actions}
-            </DialogActions>
+            {Actions && 
+                <DialogActions>
+                    {Actions}
+                </DialogActions>
+            }
         </Dialog>
     );
 
