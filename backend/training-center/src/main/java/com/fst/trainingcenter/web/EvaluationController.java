@@ -34,6 +34,12 @@ public class EvaluationController {
         );
     }
 
+    @GetMapping("/trainer/{trainerId}")
+    public ResponseEntity<List<EvaluationDTO>> getEvaluationsByTrainer(@PathVariable Long trainerId) throws TrainerNotFoundException {
+        List<EvaluationDTO> evaluations = evaluationService.getEvaluationsByTrainer(trainerId);
+        return new ResponseEntity<>(evaluations, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<EvaluationDTO> saveEvaluation(@RequestBody EvaluationDTO evaluationDTO) throws IndividualNotFoundException, TrainingNotFoundException, TrainerNotFoundException, InvalidEvaluationException {
         return new ResponseEntity<>(

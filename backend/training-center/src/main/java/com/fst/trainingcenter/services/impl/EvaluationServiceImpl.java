@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -53,7 +54,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         );
 
         Trainer trainer =  trainerRepository.findById(evaluationDTO.getTrainerId()).orElseThrow(
-                () -> new TrainerNotFoundException("Trainer  With Id = `"+evaluationDTO.getTrainerId()+ "` Does Not Exist!")
+                () -> new TrainerNotFoundException("Trainer  With Id = `"+ evaluationDTO.getTrainerId()+ "` Does Not Exist!")
         );
         Individual individual = individualRepository.findById(evaluationDTO.getIndividualId()).orElseThrow(
                 () -> new IndividualNotFoundException("individual not found id : " + evaluationDTO.getIndividualId())
@@ -70,6 +71,8 @@ public class EvaluationServiceImpl implements EvaluationService {
         }
 
         Evaluation evaluation = mappers.fromEvaluationDTO(evaluationDTO);
+        evaluation.setTrainer(trainer);
+        evaluation.setIndividual(individual);
         Evaluation evaluationSaved = evaluationRepository.save(evaluation);
         return mappers.fromEvaluation(evaluationSaved);
     }
@@ -107,5 +110,16 @@ public class EvaluationServiceImpl implements EvaluationService {
                 .orElseThrow(() -> new EvaluationNotFoundException("Evaluation not found with id: " + id));
 
         evaluationRepository.delete(evaluation);
+    }
+
+    @Override
+    public List<EvaluationDTO> getEvaluationsByTrainer(Long trainerId) throws TrainerNotFoundException {
+        Trainer trainer = trainerRepository.findById(trainerId)
+                .orElseThrow(() -> new TrainerNotFoundException("Trainer not found with id: " + trainerId));
+
+        List<Evaluation> evaluations = evaluationRepository.findByTrainer(trainer);
+        return evaluations.stream()
+                .map(mappers::fromEvaluation)
+                .collect(Collectors.toList());
     }
 }

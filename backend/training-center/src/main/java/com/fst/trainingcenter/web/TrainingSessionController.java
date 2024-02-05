@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -27,6 +29,8 @@ public class TrainingSessionController {
                 HttpStatus.OK
         );
     }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<TrainingSessionDTO> getSession(@PathVariable Long id) throws TrainingSessionNotFoundException {

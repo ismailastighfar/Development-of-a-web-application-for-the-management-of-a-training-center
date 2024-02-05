@@ -28,4 +28,6 @@ public interface TrainingService {
 
     TrainingDTO assignCompanyAndTrainer(Long trainingId,Long companyId , Long trainerId) throws TrainingNotFoundException, TrainerNotFoundException, CompanyNotFoundException, TrainingNotForCompanyException;
     TrainingDTO assignTrainerToIndividuals(Long trainingId,Long trainerId) throws TrainingNotFoundException, TrainerNotFoundException, NotEnoughIndividualsException, TrainingNotForCompanyException;
+    List<Long> getTrainingIdsForIndividuals();
+    List<String> getIndividualEmailsByTrainingId(Long trainingId) throws TrainingNotFoundException;
 }
