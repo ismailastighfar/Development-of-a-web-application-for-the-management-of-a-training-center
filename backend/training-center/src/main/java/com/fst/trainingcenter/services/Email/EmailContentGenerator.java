@@ -33,6 +33,27 @@ public class EmailContentGenerator {
                 + "</html>";
     }
 
+    public static String sendEmailAfterLastSessionContent(Training training) {
+        return "<html>"
+                + styles
+                + "<body>"
+                + "<div class='container'>"
+                + "  <div class='text-container'>"
+                + "      <p>You can now add feedback for your trainer for the training : " +training.getTitle()+ "</p><br>"
+                + "      <b>Your unique code is: " + training.getCode() + "</b><br>"
+                + "      <p>Include this code in your evaluation form.</p><br>"
+                + "    <div class='button-container' style='text-align: center;'>"
+                + "      <a href='http://localhost:4200' class='button-link'>"
+                + "       <span style='color: #fff;'> Access Application </span>"
+                + "      </a>"
+                + "    </div>"
+                + "    <div class='ntt'>© 2024 Training center</div>"
+                + "  </div>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+    }
+
     public static String getEmailApplyTrainerContent(Trainer trainer){
         return "<html>"
                 + styles

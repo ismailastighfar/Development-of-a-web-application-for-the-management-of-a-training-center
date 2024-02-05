@@ -53,7 +53,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         );
 
         Trainer trainer =  trainerRepository.findById(evaluationDTO.getTrainerId()).orElseThrow(
-                () -> new TrainerNotFoundException("Trainer  With Id = `"+evaluationDTO.getTrainerId()+ "` Does Not Exist!")
+                () -> new TrainerNotFoundException("Trainer  With Id = `"+ evaluationDTO.getTrainerId()+ "` Does Not Exist!")
         );
         Individual individual = individualRepository.findById(evaluationDTO.getIndividualId()).orElseThrow(
                 () -> new IndividualNotFoundException("individual not found id : " + evaluationDTO.getIndividualId())
@@ -70,6 +70,8 @@ public class EvaluationServiceImpl implements EvaluationService {
         }
 
         Evaluation evaluation = mappers.fromEvaluationDTO(evaluationDTO);
+        evaluation.setTrainer(trainer);
+        evaluation.setIndividual(individual);
         Evaluation evaluationSaved = evaluationRepository.save(evaluation);
         return mappers.fromEvaluation(evaluationSaved);
     }

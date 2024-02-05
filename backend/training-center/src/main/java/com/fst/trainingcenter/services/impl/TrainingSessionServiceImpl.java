@@ -17,10 +17,13 @@ import com.fst.trainingcenter.services.TrainingSessionService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -168,5 +171,16 @@ public class TrainingSessionServiceImpl implements TrainingSessionService {
                 () -> new TrainingSessionNotFoundException("trainingSession with id : " + id + "not found")
         );
         trainingSessionRepository.delete(trainingSession);
+    }
+
+    @Override
+    public Optional<LocalDate> getLastSessionDay(Long trainingId) {
+        List<TrainingSession> sessions = trainingSessionRepository.findByTrainingIdOrderBySessionDateDesc(trainingId);
+
+        if (!sessions.isEmpty()) {
+            return Optional.of(sessions.get(0).getSessionDate());
+        }
+
+        return Optional.empty();
     }
 }

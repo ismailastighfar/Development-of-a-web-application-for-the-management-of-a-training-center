@@ -35,6 +35,8 @@ public class EmailServiceImpl implements EmailService {
     private AppUserRepository<AppUser> appUserRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
+
+
     @Override
     public void sendEmailNewIndividual(Long id) throws IndividualNotFoundException {
         Individual individual = individualRepository.findById(id).orElseThrow(
@@ -147,6 +149,21 @@ public class EmailServiceImpl implements EmailService {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
             messageHelper.setTo(individual.getEmail());
             messageHelper.setSubject("New Training Session Notification");
+            messageHelper.setText(emailContent, true);
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            logger.error("Error sending welcome email to trainer", e);
+        }
+    }
+
+    @Override
+    public void sendEmailAfterLastSession(String email, Training training) {
+        String emailContent = EmailContentGenerator.sendEmailAfterLastSessionContent(training);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
+            messageHelper.setTo(email);
+            messageHelper.setSubject("Unlock Your Training Evaluation Code Now");
             messageHelper.setText(emailContent, true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {

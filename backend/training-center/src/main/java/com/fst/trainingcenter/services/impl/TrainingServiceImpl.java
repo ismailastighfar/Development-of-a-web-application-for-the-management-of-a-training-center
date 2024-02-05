@@ -13,6 +13,7 @@ import com.fst.trainingcenter.repositories.CompanyRepository;
 import com.fst.trainingcenter.repositories.IndividualRepository;
 import com.fst.trainingcenter.repositories.TrainerRepository;
 import com.fst.trainingcenter.repositories.TrainingRepository;
+import com.fst.trainingcenter.services.IndividualService;
 import com.fst.trainingcenter.services.TrainingService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
@@ -95,6 +96,7 @@ public class TrainingServiceImpl implements TrainingService {
         );
         Training training = mappers.fromTrainingDTO(trainingDTO);
         training.setId(id);
+        training.setCode(UUID.randomUUID().toString());
         Training trainingSaved = trainingRepository.save(training);
         return mappers.fromTraining(trainingSaved);
     }
@@ -235,6 +237,28 @@ public class TrainingServiceImpl implements TrainingService {
         return mappers.fromTraining(training);
     }
 
+    @Override
+    public List<Long> getTrainingIdsForIndividuals() {
+        // Replace this with your actual logic to fetch training IDs based on individuals
+        // For example, if each individual has a list of training IDs, you can aggregate them
+        List<Long> trainingIds = individualRepository.findAll().stream()
+                .map(Individual::getTrainings)
+                .flatMap(List::stream)
+                .map(Training::getId)
+                .collect(Collectors.toList());
+
+        return trainingIds;
+    }
+    @Override
+    public List<String> getIndividualEmailsByTrainingId(Long trainingId) throws TrainingNotFoundException {
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new TrainingNotFoundException("Training not found with id: " + trainingId));
+
+        List<Individual> individuals = training.getIndividuals();
+        return individuals.stream()
+                .map(Individual::getEmail)
+                .collect(Collectors.toList());
+    }
 }
 
 

@@ -14,4 +14,5 @@ public interface EmailService {
    void sendEmailAcceptTrainer(Long id,String password) throws TrainingNotFoundException;
    void sendPasswordResetEmail(String userEmail, String token) throws IndividualNotFoundException;
    void sendEmailNewSession(Individual individual , Training training , TrainingSession trainingSession);
+   void sendEmailAfterLastSession(String email,Training training);
 }
