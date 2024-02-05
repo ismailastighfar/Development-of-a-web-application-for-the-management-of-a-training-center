@@ -5,6 +5,7 @@ import LayoutTop from "./layouts/LayoutTop";
 import Authentificate from "./pages/authentification/Authentificate";
 import LayoutSide from "./layouts/LayoutSide";
 import PasswordRecovery from "./pages/authentification/RecoveryPassword.tsx/PasswordRecovery";
+import EvaluateTraining from "./pages/Evaluation/EvaluateTraning";
 
 
 const router = createBrowserRouter([
@@ -23,7 +24,16 @@ const router = createBrowserRouter([
     {
         path: "/PasswordRecovery",
         element: <PasswordRecovery />,
-    }
+    },
+    {
+        path: "/EvaluateTraining/:id?",
+        element: <EvaluateTraining />,
+    },
+
+    {
+        path: "/not-found",
+        element: <h1>Not Found</h1>,
+    },
 ]);
 
 function App() {
