@@ -34,10 +34,12 @@
     text-decoration: none;
   }
   
-  .header__link:hover {
-    outline : 1px solid $color-primary;
+  .header__link:hover:not(.active) {
+    border-bottom : 3px solid $color-primary;
   }
   
   .header__link.active {
-    outline: 2px solid $color-primary;
+    background-color: $color-primary;
+    color: $color-white;
+    cursor: default;
   }

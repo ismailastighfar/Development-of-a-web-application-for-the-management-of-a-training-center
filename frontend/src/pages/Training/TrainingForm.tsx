@@ -44,6 +44,24 @@ const TrainingForm: React.FC = () => {
 
 
     const isDataFetched = useRef(false);
+
+    const fetchTrainers = async () => {
+            const Trainersresponse = await getAllTrainers();
+            const dropdownDataTrainers = Trainersresponse.data.map((trainer: TrainerData) => ({
+                id: trainer.id,
+                name: trainer.nom || '', 
+            }));
+            setTrainersList(dropdownDataTrainers);
+        }
+
+    const fetchTraining = async () => {
+        if(trainingId !== 0){
+            const response = await getTrainingById(trainingId);                        
+            setFormData(response);
+        }
+    }
+
+
     useEffect(() => {
         if (!isDataFetched.current) {
              // Fetch the user data from the API
@@ -51,12 +69,6 @@ const TrainingForm: React.FC = () => {
                 try {
                     // const response = await getCompanyById(trainingId);
                     // setFormData(response);
-
-                    if(trainingId !== 0){
-                        const response = await getTrainingById(trainingId);                        
-                        setFormData(response);
-                    }
-
                     const Companiesresponse = await getAllCompanies();
                     const dropdownData = Companiesresponse.data.map((company: CompanyData) => ({
                         id: company.id,
@@ -64,13 +76,6 @@ const TrainingForm: React.FC = () => {
                     }));
 
                     setCompaniesList(dropdownData);
-
-                    const Trainersresponse = await getAllTrainers();
-                    const dropdownDataTrainers = Trainersresponse.data.map((trainer: TrainerData) => ({
-                        id: trainer.id,
-                        name: trainer.nom || '', 
-                    }));
-                    setTrainersList(dropdownDataTrainers);
 
                     const Categoriesresponce = await getCategories();
                     console.log("categories : ",Categoriesresponce)
@@ -86,6 +91,8 @@ const TrainingForm: React.FC = () => {
                     // setCompanyId(0);
                 }
             };
+            fetchTraining();
+            fetchTrainers();
             fetchData();
           }
             isDataFetched.current = true;
@@ -180,8 +187,14 @@ const handleSubmit = async (event: FormEvent) => {
                     <h1>{trainingId !== 0 ?"Training Details " : "New Training"}</h1>
                     {trainingId !== 0 &&(
                         <div>
-                            <button 
+                            {!formData.forCompany && 
+                                <button 
                                 className="btn"
+                                type="button"
+                                onClick={() => {navigate(`/Individuals/${trainingId}`)}}> Individuals</button>
+                            }
+                            <button 
+                                className="btn btn-primary"
                                 type="button"
                                 onClick={() => {navigate(`/planification/${trainingId}`)}}> Planification</button>
                             

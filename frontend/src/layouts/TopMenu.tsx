@@ -33,8 +33,7 @@ const Header = () => {
                                 )}
                                 {!user ? (
                                     <NavLink
-                                        to={'/auth'}
-                                        key={(FrontOfficeRout.length + 1)}
+                                        to='/auth'
                                         className="header__link">
                                         Login
                                     </NavLink>
@@ -43,8 +42,7 @@ const Header = () => {
                                 (
                                     <NavLink
                                         onClick={() => logout()}
-                                        to={window.location.pathname}
-                                        key={(FrontOfficeRout.length + 2)}
+                                        to='/auth'
                                         className="header__link">
                                         Logout
                                     </NavLink>)

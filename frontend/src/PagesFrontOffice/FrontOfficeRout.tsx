@@ -4,7 +4,7 @@ import UserTrainingsList from "./userTraining/UserTrainingList"
 export const FrontOfficeRout =[
         {
             label: "Home",
-            path: "/frontoffice",
+            path: "/frontoffice/home",
             element: <Home />,
             requireAuth: false,
             showInNav: true,

@@ -39,3 +39,17 @@ button {
       @extend .button-spacing;
     }
   }
+
+form{
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    button {
+      flex: 1;
+    }
+  }
+
+}

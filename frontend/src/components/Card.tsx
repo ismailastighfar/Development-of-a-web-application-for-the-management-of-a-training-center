@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleDollarToSlot, faClock, faLocationDot, faCalendar } from '@fortawesome/free-solid-svg-icons'
+
 
 export interface CardData {
     id: number;
@@ -14,30 +17,26 @@ export interface CardData {
 
 export const Card = (cardData:CardData) => {
     return (
-        <div className='card'>
+        <div className='card' onClick={cardData.SubmitOnClick}>
             <div className='card__title'>
                 { cardData.title }
             </div>
+            <div className="card__desc">{ cardData.category }</div>
             <div className='card__content'>
                 <p className='card__content-front'>{ cardData.content }</p>
+
                 <div className='card_external_data'>
-                    <div className='card__external_line'>
-                        <p>Cost : { cardData.const } (DH)</p>
-                        <p>Duratoin : { cardData.hours } Hour</p>
-                    </div>
-                    <div className='card__external_line'>
-                        <p>Category : { cardData.category }</p>
-                        <p>City : { cardData.city }</p>
-                    </div>
-                    <div className='card__external_line'>
-                        <p>End Entroll Data : { cardData.endEntrollData }</p>
-                    </div>
+                        <p><FontAwesomeIcon icon={faCircleDollarToSlot} />{ cardData.const } (DH)</p>
+                        <p><FontAwesomeIcon icon={faClock} />{ cardData.hours }H</p>
+                        <p><FontAwesomeIcon icon={faLocationDot} />{ cardData.city }</p>
+                        <p><FontAwesomeIcon icon={faCalendar} />{ cardData.endEntrollData }</p>
                 </div>
-                <div className='card__button'>
-                 {cardData.actions ? cardData.actions : 
-                     <button className='btn btn-primary' onClick={cardData.SubmitOnClick}>Enroll</button>
-                 }
-            </div>
+
+                {cardData.actions && (
+                    <div className='card_actions'>
+                        {cardData.actions}
+                    </div>
+                )}
             </div>
         </div>
 

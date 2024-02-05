@@ -113,3 +113,16 @@ export const getCategories = () => {
 }
 
 
+
+// Assing Trainer to Training
+export const AssignTrainerToTraining = (trainingId : number , trainerId : number ) => {
+
+    return API.post(`/trainings/${trainingId}/assign/trainer/${trainerId}/individuals` , {headers})
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+
+}
+

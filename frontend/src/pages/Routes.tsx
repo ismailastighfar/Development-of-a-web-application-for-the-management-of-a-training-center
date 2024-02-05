@@ -9,6 +9,7 @@ import TrainingList from "./Training/TrainingList";
 import CalendarPlanification from "./Planification/CalendarPlanification";
 import AssistantForm from "./assistante/AssistantceForm";
 import AssistantsList from "./assistante/AssistantesList";
+import IndivualdTraningList from "./Individuals/IndividualsTraning";
 
 export const routesData = [
     {
@@ -63,6 +64,12 @@ export const routesData = [
         label: "Planification",
         path: "/planification/:Trainingid?",
         element: <CalendarPlanification />,
+        showInNav: false,
+    },
+    {
+        label: "Individuals",
+        path: "/individuals/:id",
+        element: <IndivualdTraningList />,
         showInNav: false,
     },
     {

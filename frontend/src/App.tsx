@@ -4,6 +4,8 @@ import { FrontOfficeRout } from "./PagesFrontOffice/FrontOfficeRout";
 import LayoutTop from "./layouts/LayoutTop";
 import Authentificate from "./pages/authentification/Authentificate";
 import LayoutSide from "./layouts/LayoutSide";
+import PasswordRecovery from "./pages/authentification/RecoveryPassword.tsx/PasswordRecovery";
+
 
 const router = createBrowserRouter([
     {
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
     {
         path: "/auth",
         element: <Authentificate />,
+    },
+    {
+        path: "/PasswordRecovery",
+        element: <PasswordRecovery />,
     }
 ]);
 

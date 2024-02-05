@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { EventInput } from '@fullcalendar/core/index.js';
 import interactionPlugin from '@fullcalendar/interaction';
-import { json, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState , useEffect , useRef } from "react";
 import Popup from '../../components/Popup';
 import { TrainingSessionData , TrainingSessionRequest , SaveTrainingSessionsList , GetTrainingSessionsByTraining } from "../../hooks/TrainingSessionsAPI"

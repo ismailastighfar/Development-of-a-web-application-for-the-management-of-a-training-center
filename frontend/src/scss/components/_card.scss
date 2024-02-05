@@ -1,74 +1,93 @@
 .card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px;
-    background-color: $color-white;
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    position: relative;
-    max-width: 800px;
-  }
-  
-  .card__title {
-    font-weight: 600;
-    align-self: center;
-    font-size: 28px;
-    color: $color-primary;
-    margin-bottom: 20px;
-  }
-  
-  .card__content {
-    font-weight: 500;
-    font-size: 18px;
-  }
-  
-  .card__content-front {
-    color: $color-dark-1;
-  }
-  
-  .loading {
-    width: 100%;
-    text-align: center;
-    padding: 30px;
-    font-size: 24px;
-  }
-  
-  .card.rotated {
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  background-color: $color-white;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  position: relative;
+  max-width: 800px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  scale: 1.05;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card__title {
+  font-weight: 600;
+  align-self: left;
+  font-size: 28px;
+  font-weight: 700;
+  color: $color-primary;
+}
+
+.card__desc {
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: lowercase;
+  color: $color-dark-2;
+  margin-bottom: 20px;
+}
+
+.card__content {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.card__content-front {
+  color: $color-dark-1;
+  font-size: 20px;
+}
+
+.loading {
+  width: 100%;
+  text-align: center;
+  padding: 30px;
+  font-size: 24px;
+}
+
+.card.rotated {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.card_external_data {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  color: $color-dark-1;
+  margin-top: 20px;
+}
+
+.card_external_data p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+  color: $color-dark-2;
+}
+.card svg:not(:root).svg-inline--fa, 
+.card svg:not(:host).svg-inline--fa {
+  color: $color-primary;
+}
 
 
-  .card_external_data {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;   
-    gap: 20px;
-    font-size: 15px;
-    font-weight: bold;
-    color: $color-dark-1;
+.card_actions{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  gap: 10px;
+
+  button{
+    flex: 1;
   }
-
-  .card__external_line{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: bold;
-  }
-
-
-
-  .card__button{
-    margin-top: 30px;
-    display: flex;
-    align-items: center;   
-    justify-content: space-between;
-    font-weight: bold;
-
-    button{
-      width: 100%;
-    }
-  }
+}

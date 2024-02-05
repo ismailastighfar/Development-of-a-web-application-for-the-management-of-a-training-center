@@ -42,28 +42,19 @@ export const getTrainerById = (id: number) => {
 
 //save new trainer
 export const SaveTrainer = (trainerData: TrainerData) => {
-
-    //General Header
-const headers = {
-    'Content-Type': 'application/json', // Example header, adjust as needed
-};
     
-return API.post("/trainers", trainerData , {headers})
-    .then((res) => res)
-    .catch((error) => {
-        const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
-        throw new Error(errorMessage);        
-    });
+    return API.post("/trainers", trainerData , {headers})
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
 
 }
 
 //update trainer
 export const UpdateTrainer = (trainerData: TrainerData) => {
 
-        //General Header
-    const headers = {
-        'Content-Type': 'application/json', // Example header, adjust as needed
-    };
     return API.put("/trainers/"+trainerData.id, trainerData , {headers})
         .then((res) => res)
         .catch((error) => {
@@ -85,4 +76,34 @@ export const getAllTrainers = () => {
 
 }
 
+//get trainers by status 
+export const getTrainersByIsAccept = (IsAccepted : boolean) => {
+
+    return API.get(`/trainers/isAccepted/${IsAccepted}` , {headers})
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+}
+
+
+//Accept trainer
+export const AcceptTrainer = (id: number) => {
+
+    const test_header = {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Content-Type': 'application/json', // Example header, adjust as needed
+    };
+
+    console.log(test_header)
+    
+    return API.post("/trainers/accept/"+id ,{}, {headers :test_header})
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+
+}
 
