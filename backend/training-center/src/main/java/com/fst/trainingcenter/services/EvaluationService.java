@@ -12,6 +12,7 @@ public interface EvaluationService {
     EvaluationDTO createEvaluation(EvaluationDTO evaluationDTO) throws TrainerNotFoundException, IndividualNotFoundException, TrainingNotFoundException, InvalidEvaluationException;
     EvaluationDTO updateEvaluation(Long id,EvaluationDTO evaluationDTO) throws EvaluationNotFoundException, TrainingNotFoundException, InvalidEvaluationException;
     void deleteEvaluation(Long id) throws EvaluationNotFoundException;
+    List<EvaluationDTO> getEvaluationsByTrainer(Long trainerId) throws TrainerNotFoundException;
 
 
 }

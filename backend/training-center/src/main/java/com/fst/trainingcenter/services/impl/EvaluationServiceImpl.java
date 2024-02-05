@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -109,5 +110,16 @@ public class EvaluationServiceImpl implements EvaluationService {
                 .orElseThrow(() -> new EvaluationNotFoundException("Evaluation not found with id: " + id));
 
         evaluationRepository.delete(evaluation);
+    }
+
+    @Override
+    public List<EvaluationDTO> getEvaluationsByTrainer(Long trainerId) throws TrainerNotFoundException {
+        Trainer trainer = trainerRepository.findById(trainerId)
+                .orElseThrow(() -> new TrainerNotFoundException("Trainer not found with id: " + trainerId));
+
+        List<Evaluation> evaluations = evaluationRepository.findByTrainer(trainer);
+        return evaluations.stream()
+                .map(mappers::fromEvaluation)
+                .collect(Collectors.toList());
     }
 }
