@@ -10,6 +10,8 @@ import Popup from '../../components/Popup';
 import { TrainingSessionData , TrainingSessionRequest , SaveTrainingSessionsList , GetTrainingSessionsByTraining } from "../../hooks/TrainingSessionsAPI"
 import { TrainingData , getTrainingById } from '../../hooks/TraininAPI';
 import {TrainingSession} from '../../components/TrainingSession';
+import { useAuth , Roles} from "../../context/UserContext";
+
 
 interface CalendarPlanificationProps {
 
@@ -18,6 +20,10 @@ interface CalendarPlanificationProps {
 }
 
 const CalendarPlanification: React.FC<CalendarPlanificationProps> = ({training_Id = 0 , IsEditMode = true}) => {
+
+  const { userHasRole } = useAuth();
+
+  IsEditMode = userHasRole([Roles.Admin , Roles.Assistance]) || !IsEditMode;
 
   const { Trainingid } = useParams<{ Trainingid?: string }>();
   const [trainingStartDate, setTrainingStartDate] = useState<string>('');
@@ -151,6 +157,7 @@ const CalendarPlanification: React.FC<CalendarPlanificationProps> = ({training_I
     console.log(trainingSessionsList);
     try{
       SaveTrainingSessionsList(trainingSessionsList);
+      alert("Sessions Saved")
     }
     catch(error){
       alert(error);
@@ -204,7 +211,7 @@ const CalendarPlanification: React.FC<CalendarPlanificationProps> = ({training_I
             plugins={[ dayGridPlugin, interactionPlugin , timeGridPlugin]}
             initialView="dayGridMonth"
             headerToolbar={{
-                left: `${IsEditMode ? 'back ' : ''}prev,next today`,
+                left: `${IsEditMode || userHasRole([Roles.Trainer]) ? 'back ' : ''}prev,next today`,
                 center: 'title',
                 right: `dayGridMonth,timeGridWeek,timeGridDay${IsEditMode ? ' saveEvent' : ''}`,
               }}
@@ -214,7 +221,7 @@ const CalendarPlanification: React.FC<CalendarPlanificationProps> = ({training_I
             firstDay={1}
             height={900}
             events={events}
-            customButtons={IsEditMode ? customButtonsData : {}}
+            customButtons={IsEditMode ? customButtonsData : {back: { text: "Back", click: function() {window.history.back();} }}}
             eventStartEditable={IsEditMode}
             eventDurationEditable={IsEditMode}
             displayEventEnd={true}

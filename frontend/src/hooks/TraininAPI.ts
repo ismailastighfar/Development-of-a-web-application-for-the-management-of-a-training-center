@@ -126,3 +126,15 @@ export const AssignTrainerToTraining = (trainingId : number , trainerId : number
 
 }
 
+//Delete Training
+export const DeleteTraining = (id: number) => {
+
+    return API.delete(`/trainings/${id}` , {headers})
+        .then((res) => res)
+        .catch((error) => {
+        const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+        throw new Error(errorMessage);        
+    });
+
+}
+

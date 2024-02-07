@@ -4,6 +4,8 @@ import { TrainerData , getAllTrainers} from "../../hooks/TrainerAPI";
 import { useState , useEffect , useRef } from "react";
 import { useParams,useNavigate} from 'react-router-dom';
 import { alignProperty } from "@mui/material/styles/cssUtils";
+import { useAuth , Roles} from "../../context/UserContext";
+
 
 
 const IndivualdTraningList = () => {
@@ -17,12 +19,14 @@ const IndivualdTraningList = () => {
         name: string;
     }
 
+    const { userHasRole } = useAuth();
 
     const [traningId , setTraningId] = useState<number>(parseInt(id || '0'));
     const [individuals , setIndividuals] = useState<IndividualData[]>([]);
     const [trainerId , setTrainerId] = useState<number>(0);
     const [trainersList , setTrainersList] = useState<DropdownData[]>([]);
     const [trainingData , settrainingData] = useState<TrainingData>();
+
 
     const isDataFetched = useRef(false);
     trainingData
@@ -91,13 +95,13 @@ const IndivualdTraningList = () => {
                 <h1>Individuals List</h1>
                 <div>
                     <button className="btn" onClick={() => window.history.back()}>Back</button>
-                    {trainingData?.minSeats && trainingData.minSeats <= individuals.length && 
+                    {userHasRole([Roles.Admin , Roles.Assistance]) &&   trainingData?.minSeats && trainingData.minSeats <= individuals.length && 
 
                         <button className="btn btn-primary" onClick={handleSaveTrainerOnClick }>Save</button>
                     }
                 </div>
             </div>
-            {trainingData?.minSeats && trainingData.minSeats <= individuals.length && 
+            {userHasRole([Roles.Admin , Roles.Assistance]) && trainingData?.minSeats && trainingData.minSeats <= individuals.length && 
                 <div className="form-group">
                     <label htmlFor="trainerId">Trainer</label>
                     <select 
@@ -126,8 +130,9 @@ const IndivualdTraningList = () => {
                 </thead>
                 <tbody>
                     {individuals.map((Individual , index) => (
-                        <tr key={Individual.nom} className={index % 2 === 0 ? '' : 'active-row'}>
+                        <tr key={index} className={index % 2 === 0 ? '' : 'active-row'}>
                             <td>{Individual.nom}</td>
+                            <td>{Individual.surname}</td>
                             <td>{Individual.email}</td>
                             <td>{Individual.phone}</td>
                         </tr>

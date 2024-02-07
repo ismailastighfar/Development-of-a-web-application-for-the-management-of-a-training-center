@@ -3,6 +3,8 @@ import { CompanyData , getAllCompanies } from "../../hooks/CompanyAPI";
 import { TrainerData , getAllTrainers} from "../../hooks/TrainerAPI";
 import { ChangeEvent,FormEvent ,useState,useEffect , useRef } from "react";
 import { useParams,useNavigate } from 'react-router-dom';
+import { useAuth , Roles} from "../../context/UserContext";
+
 
 
 const TrainingForm: React.FC = () => {
@@ -40,7 +42,11 @@ const TrainingForm: React.FC = () => {
     const [TrainersList , setTrainersList] = useState<DropdownData[]>([]);
     const [CategoriesList , setCategoriesList] = useState<DropdownData[]>([]);
 
-    const [formData, setFormData] = useState<TrainingData>(initialTrainingData)
+    const [formData, setFormData] = useState<TrainingData>(initialTrainingData);
+
+    const { userHasRole } = useAuth();
+
+    const [IsformEnabled , setIsformEnabled] = useState<boolean>(userHasRole([Roles.Admin , Roles.Assistance]));
 
 
     const isDataFetched = useRef(false);
@@ -162,9 +168,10 @@ const handleSubmit = async (event: FormEvent) => {
         console.log(response);
         if (response.status === 201 || response.status === 200) {
             // Add a message bofore doing something else
-            setTrainingId(response.data.id);
+            const TrainingId = parseInt(response.data.id || '0');
+            setTrainingId(TrainingId);
             if(formData.forCompany && formData.companyId !== null && formData.trainerId !== null){
-                const responseAssign = await AssignTrainingToCompany(trainingId , formData.trainerId , formData.companyId);
+                const responseAssign = await AssignTrainingToCompany(TrainingId , formData.trainerId , formData.companyId);
                 console.log(responseAssign);
             }
             formData.id = trainingId;
@@ -196,7 +203,7 @@ const handleSubmit = async (event: FormEvent) => {
                             <button 
                                 className="btn btn-primary"
                                 type="button"
-                                onClick={() => {navigate(`/planification/${trainingId}`)}}> Planification</button>
+                                onClick={() => {navigate(`/planification/${trainingId}`)}}> {IsformEnabled ? 'Planification' : 'Sessions'}</button>
                             
                         </div>
                     )}
@@ -212,7 +219,7 @@ const handleSubmit = async (event: FormEvent) => {
                             value={formData?.title}
                             onChange={handleFormChange}
                             required={true}
-                            disabled={false}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -225,7 +232,7 @@ const handleSubmit = async (event: FormEvent) => {
                             value={formData?.city}
                             onChange={handleFormChange}
                             required={true}
-                            disabled={false}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -237,7 +244,8 @@ const handleSubmit = async (event: FormEvent) => {
                             placeholder="hours"
                             value={formData?.hours===null?'':formData.hours }
                             onChange={handleFormChange}
-                            required
+                            required={true}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -250,7 +258,7 @@ const handleSubmit = async (event: FormEvent) => {
                             placeholder="cost"
                             onChange={handleFormChange}
                             required={true}
-                            disabled={false}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -262,7 +270,8 @@ const handleSubmit = async (event: FormEvent) => {
                             value={formData.endEnrollDate ? formData.endEnrollDate+'': ''}
                             placeholder="start date"
                             onChange={handleStartDateChange}
-                            required
+                            required={true}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -274,7 +283,8 @@ const handleSubmit = async (event: FormEvent) => {
                             value={formData?.maxSessions===null?'':formData.maxSessions}
                             placeholder="max Sessions"
                             onChange={handleFormChange}
-                            required
+                            required={true}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -287,7 +297,7 @@ const handleSubmit = async (event: FormEvent) => {
                             placeholder="objective"
                             onChange={handleFormChange}
                             required={true}
-                            disabled={false}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -300,7 +310,7 @@ const handleSubmit = async (event: FormEvent) => {
                             placeholder="detailed program"
                             onChange={handleFormChange}
                             required={true}
-                            disabled={false}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     <div className="form-group">
@@ -310,7 +320,8 @@ const handleSubmit = async (event: FormEvent) => {
                             name="category"
                             value={formData?.category} 
                             onChange={hadleCategoryDropdownChange} 
-                            required>
+                            required={true} 
+                            disabled={!IsformEnabled}>
                             <option value="0">  </option>
                             {CategoriesList.map((dropdownItem) => (
                                     <option key={dropdownItem.id} value={dropdownItem.name}>
@@ -328,6 +339,8 @@ const handleSubmit = async (event: FormEvent) => {
                             checked={formData?.forCompany}
                             placeholder="is For Company"
                             onChange={handleIsForCompanyChange}
+                            required={true}
+                            disabled={!IsformEnabled}
                         />
                     </div>
                     {!formData.forCompany && (
@@ -342,7 +355,7 @@ const handleSubmit = async (event: FormEvent) => {
                                     placeholder="available seats"
                                     onChange={handleFormChange}
                                     required={!formData.forCompany}
-                                    disabled={false}
+                                    disabled={!IsformEnabled}
                                 />
                             </div>
                             <div className="form-group">
@@ -355,7 +368,7 @@ const handleSubmit = async (event: FormEvent) => {
                                     placeholder="minimum seats to start"
                                     onChange={handleFormChange}
                                     required={!formData.forCompany}
-                                    disabled={false}
+                                    disabled={!IsformEnabled}
                                 />
                             </div>
                         </>
@@ -369,7 +382,8 @@ const handleSubmit = async (event: FormEvent) => {
                                     name="companyId"
                                     value={formData?.companyId+'' || ''} 
                                     onChange={handleCompanyDropdownChange} 
-                                    required = {true}>
+                                    required = {true}
+                                    disabled={!IsformEnabled}>
                                     <option value="0">  </option>
                                     {CompaniesList.map((dropdownItem) => (
                                             <option key={dropdownItem.id} value={dropdownItem.id}>
@@ -385,7 +399,8 @@ const handleSubmit = async (event: FormEvent) => {
                                     name="trainerId"
                                     value={formData.trainerId+'' || ''} 
                                     onChange={handleTrainerDropdownChange} 
-                                    required = {true}>
+                                    required = {true}
+                                    disabled={!IsformEnabled}>
                                     <option value="0">  </option>
                                     {TrainersList.map((dropdownItem) => (
                                             <option key={dropdownItem.id} value={dropdownItem.id}>
@@ -396,15 +411,17 @@ const handleSubmit = async (event: FormEvent) => {
                             </div>
                         </>
                     )}
-                    <div>
-                        <button
-                                className="btn btn-primary"
-                                type="submit">Save</button>
-                        <button
-                                className="btn"
-                                type="button"
-                                onClick={() => {window.history.back()}}>Cancel</button>
-                    </div>
+                    {IsformEnabled && (
+                        <div>
+                            <button
+                                    className="btn btn-primary"
+                                    type="submit">Save</button>
+                            <button
+                                    className="btn"
+                                    type="button"
+                                    onClick={() => {window.history.back()}}>Cancel</button>
+                        </div>
+                    )}
                 </div>  
             </form>
     );

@@ -1,11 +1,12 @@
 import logo from "../assets/Logo.png";
 import { NavLink, Link } from 'react-router-dom'
 import { FrontOfficeRout } from "../PagesFrontOffice/FrontOfficeRout";
-import {useAuth} from "../context/UserContext";
+import {useAuth} from "../context/UserContext"
+
 
 
 const Header = () => {
-    const { user, logout } = useAuth(); // Call useAuth() once at the top level
+    const { user, logout , userHasRole} = useAuth(); // Call useAuth() once at the top level
         return (
         <header className='header'>
             <Link to='/frontoffice' >
@@ -16,7 +17,7 @@ const Header = () => {
                                 {FrontOfficeRout.map((route, index) => {
                                     return(
                                         <>
-                                            {route.showInNav && (user || !route.requireAuth) && (
+                                            {route.showInNav && (user || !route.requireAuth) && userHasRole(route.roles) &&(
                                                         <NavLink
                                                             to={route.path}
                                                             className={({ isActive }) =>

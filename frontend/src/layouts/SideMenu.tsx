@@ -1,9 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { routesData } from "../pages/Routes";
 import logo from "../assets/Logo.png";
-import BecomeTrainer from "../components/BecomeTrainer";
+import AuthBackOffice from "../components/BackOfficeAuthenfication";
+import {useAuth} from "../context/UserContext"
+
 
 const SideMenu = () => {
+    const { userHasRole } = useAuth();
     return (
         <div className="side-menu">
             <div className="app-logo">
@@ -12,7 +15,7 @@ const SideMenu = () => {
             <div className="nav-items">
                 {routesData.map((route, index) => {
                     return (
-                        route.showInNav && (
+                        route.showInNav && userHasRole(route.roles) && (
                             <NavLink
                                 to={route.path}
                                 className={({ isActive }) =>
@@ -26,7 +29,7 @@ const SideMenu = () => {
                     );
                 })}
             </div>
-            <BecomeTrainer />
+            <AuthBackOffice />
         </div>
     );
 };

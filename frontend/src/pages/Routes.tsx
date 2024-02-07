@@ -10,78 +10,92 @@ import CalendarPlanification from "./Planification/CalendarPlanification";
 import AssistantForm from "./assistante/AssistantceForm";
 import AssistantsList from "./assistante/AssistantesList";
 import IndivualdTraningList from "./Individuals/IndividualsTraning";
+import {Roles} from "../context/UserContext"
+
 
 export const routesData = [
     {
         label: "Home",
         path: "/",
         element: <Home />,
+        roles: [Roles.Admin, Roles.Assistance, Roles.Trainer],
         showInNav: true,
     },
     {
         label: "Formations",
         path: "/formations",
         element: <Formations />,
+        roles: [Roles.Admin, Roles.Assistance],
         showInNav: true,
     },
     {
         label: "Trainer Detail",
         path: "/trainerdetail/:id?",
         element: <TrainerForm />,
+        roles: [Roles.Admin, Roles.Assistance],
         showInNav: false,
     },
     {
         label: "Company Detail",
         path: "/companydetail/:id?",
         element: <CompanyForm />,
+        roles: [Roles.Admin, Roles.Assistance],
         showInNav: false,
     },
     {
         label: "Training Detail",
         path: "/trainingdetail/:id?",
         element: <TrainingForm />,
+        roles: [Roles.Admin, Roles.Assistance , Roles.Trainer],
         showInNav: false,
-    },
-    {
-        label: "Companies",
-        path: "/companies",
-        element: <CompaniesList />,
-        showInNav: true,
-    },
-    {
-        label: "Trainers",
-        path: "/trainers",
-        element: <TrainersList />,
-        showInNav: true,
     },
     {
         label: "Trainings",
         path: "/trainings",
         element: <TrainingList />,
+        roles: [Roles.Admin, Roles.Assistance , Roles.Trainer],
         showInNav: true,
     },
     {
         label: "Planification",
         path: "/planification/:Trainingid?",
         element: <CalendarPlanification />,
+        roles: [Roles.Admin, Roles.Assistance , Roles.Trainer],
         showInNav: false,
+    },
+    {
+        label: "Companies",
+        path: "/companies",
+        element: <CompaniesList />,
+        roles: [Roles.Admin, Roles.Assistance],
+        showInNav: true,
+    },
+    {
+        label: "Trainers",
+        path: "/trainers",
+        element: <TrainersList />,
+        roles: [Roles.Admin, Roles.Assistance],
+        showInNav: true,
     },
     {
         label: "Individuals",
         path: "/individuals/:id",
         element: <IndivualdTraningList />,
+        roles: [Roles.Admin, Roles.Assistance , Roles.Trainer],
         showInNav: false,
     },
     {
         label: "Assistants",
         path: "/assistants",
         element: <AssistantsList />,
+        roles: [Roles.Admin],
         showInNav: true,
     },
     {
         label: "AssistantForm",
         path: "/assistantform/:id?",
         element: <AssistantForm />,
+        roles: [Roles.Admin],
         showInNav: false,
     }
 ];

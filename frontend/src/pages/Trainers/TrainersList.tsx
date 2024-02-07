@@ -1,7 +1,8 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import { TrainerData , getAllTrainers , getTrainersByIsAccept , AcceptTrainer} from "../../hooks/TrainerAPI";
+import { TrainerData  , getTrainersByIsAccept , AcceptTrainer , DeleteTrainer} from "../../hooks/TrainerAPI";
 import { useState , useEffect , useRef } from "react";
-import { useParams,useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
+import ConfirmationPopup from "../../components/Confirmation";
+
 
 
 const TrainersList = () => {
@@ -10,6 +11,8 @@ const TrainersList = () => {
 
     const [trainers, setTrainers] = useState<TrainerData[]>([]);
     const [trainersRequest , setTrainersRequest] = useState<TrainerData[]>([]);
+    const [selectedTrainer, setSelectedTrainer] = useState<number>(0);
+    const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
 
     const isDataFetched = useRef(false);
 
@@ -50,6 +53,23 @@ const TrainersList = () => {
         setTrainerStatus(trainerId);
     }
 
+    const handleDeleteTrainer = (id: number) => {
+        setSelectedTrainer(id);
+        setShowConfirmation(true);
+    }
+
+    const deleteTrainer= async () => {
+        try {
+            await DeleteTrainer(selectedTrainer);
+            alert("Trainer deleted successfully");
+            fetchTrainngByStatus(true);
+            fetchTrainngByStatus(false);
+        } catch (error) {
+            alert("Error deleting trainer");
+        }
+        setShowConfirmation(false);
+    }
+
     return (
         <div>
             <div className="section-header">
@@ -79,7 +99,7 @@ const TrainersList = () => {
                                         <div className="items-to-right">
                                             <button className="btn" onClick={() => handleAcceptTrainer(trainer.id)}>Accept</button>
                                             <button className="btn" onClick={() => navigate('/trainerdetail/'+trainer.id)}>Details</button>
-                                            <button className="btn btn-danger" onClick={() => navigate('/trainerdetail/'+trainer.id)}>Delete</button>
+                                            <button className="btn btn-danger" onClick={() => handleDeleteTrainer(trainer.id)}>Delete</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -109,7 +129,7 @@ const TrainersList = () => {
                                 <td>
                                     <div className="items-to-right">
                                         <button className="btn" onClick={() => navigate('/trainerdetail/'+trainer.id)}>Details</button>
-                                        <button className="btn btn-danger" onClick={() => navigate('/trainerdetail/'+trainer.id)}>Delete</button>
+                                        <button className="btn btn-danger" onClick={() => handleDeleteTrainer(trainer.id)}>Delete</button>
                                     </div>
                                 </td>
                             </tr>
@@ -117,6 +137,16 @@ const TrainersList = () => {
                     </tbody>
                 </table>
             </div>
+            {showConfirmation && (
+                 <ConfirmationPopup
+                    IsOpen={showConfirmation}
+                    content="Are you sure you want to delete this trainer"
+                    onConfirm={() => {
+                        deleteTrainer();
+                    }}
+                    cancelOnClick={() => setShowConfirmation(false)}
+               />
+            )}
         </div>
     );
 

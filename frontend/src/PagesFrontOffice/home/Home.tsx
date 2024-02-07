@@ -11,7 +11,8 @@ import { PageResponse } from "../../Common/PageResponseAPI";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import Card, { CardData } from "../../components/Card";
 import Popup from "../../components/Popup";
-import { TrainingData, getCategories } from "../../hooks/TraininAPI";
+import { getCategories } from "../../hooks/TraininAPI";
+import ConfirmationPopup from "../../components/Confirmation";
 
 const frontHome = () => {
   interface DropdownData {
@@ -39,6 +40,8 @@ const frontHome = () => {
   let userEnrolledTraining: number[] = [];
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const isDataFetched = useRef(false);
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+  const [SelcetedTrainingIndex, setSelcetedTrainingIndex] = useState<number>(0);
 
   const fetchTrainingList = async () => {
     try {
@@ -88,23 +91,31 @@ const frontHome = () => {
   }, []);
 
   const handleEnrollToTraining = (index: number) => {
-    if (!user) {
+    setSelcetedTrainingIndex(index);
+    if (!user)
       setShowLoginPopup(true);
-    } else {
-      const trainingId = trainingPageData?.content[index].id;
-      const IndvidualId = user.id;
-      const enrollToTraining = async () => {
-        try {
-          const response = await EnrollToTraining(trainingId, IndvidualId);
-          console.log(response);
-          fetchData();
-          alert("You have successfully enrolled to the training");
-        } catch (error) {
-          alert("Error enrolling to the training");
-        }
-      };
-      enrollToTraining();
-    }
+    else 
+      setShowConfirmationPopup(true);
+  };
+
+
+  const enrollToTrainingOnClick = () => {
+    console.log(SelcetedTrainingIndex);
+    const trainingId = trainingPageData?.content[SelcetedTrainingIndex].id;
+    if (!user) return;
+    const IndvidualId = user.id;  
+    const enrollToTraining = async () => {
+      try {
+        const response = await EnrollToTraining(trainingId, IndvidualId);
+        console.log(response);
+        fetchData();
+        alert("You have successfully enrolled to the training");
+      } catch (error) {
+        alert("Error enrolling to the training");
+      }
+    };
+    enrollToTraining();
+    setShowConfirmationPopup(false);
   };
 
   // Handle form field changes
@@ -134,6 +145,7 @@ const frontHome = () => {
       category: selectedCategory,
     });
   };
+
 
   return (
     <>
@@ -228,6 +240,16 @@ const frontHome = () => {
           }
           IsOpen={true}
           OnClose={() => setShowLoginPopup(false)}
+        />
+      )}
+      {showConfirmationPopup && (
+        <ConfirmationPopup
+          IsOpen={showConfirmationPopup}
+          content="Are you sure you want to enroll to this training"
+          onConfirm={() => {
+            enrollToTrainingOnClick();
+          }}
+          cancelOnClick={() => setShowConfirmationPopup(false)}
         />
       )}
     </>

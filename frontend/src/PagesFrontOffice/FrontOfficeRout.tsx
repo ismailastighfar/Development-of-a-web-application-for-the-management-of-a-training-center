@@ -1,5 +1,6 @@
 import Home from "./home/Home"
 import UserTrainingsList from "./userTraining/UserTrainingList"
+import {Roles} from "../context/UserContext"
 
 export const FrontOfficeRout =[
         {
@@ -14,6 +15,7 @@ export const FrontOfficeRout =[
             path: "/frontoffice/mytrainings",
             element: <UserTrainingsList />,
             requireAuth: true,
+            roles: [Roles.Individual],
             showInNav: true,
         },
 ]

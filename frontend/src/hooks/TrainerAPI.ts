@@ -107,3 +107,15 @@ export const AcceptTrainer = (id: number) => {
 
 }
 
+//Delete Trainer
+export const DeleteTrainer = (id: number) => {
+
+    return API.delete("/trainers/"+id , {headers})
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+
+}
+
