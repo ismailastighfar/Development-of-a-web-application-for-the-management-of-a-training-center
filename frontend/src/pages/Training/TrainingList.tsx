@@ -57,7 +57,7 @@ const TrainingList: React.FC = () => {
         <div>
             <div className="section-header">
                 <h1>Trainings List</h1>
-                {userHasRole([Roles.Admin , Roles.Assistance]) && (
+                {userHasRole([Roles.Admin]) && (
                     <button className="btn btn-primary" onClick={() => navigate('/trainingdetail')}>Add Training</button>
                 )}
             </div>
@@ -83,7 +83,7 @@ const TrainingList: React.FC = () => {
                             <td>
                                 <div className="items-to-right">
                                     <button className="btn" onClick={() => navigate('/trainingdetail/'+training.id)}>Details</button>
-                                    {userHasRole([Roles.Admin , Roles.Assistance]) && (
+                                    {userHasRole([Roles.Admin]) && (
                                     <button className="btn btn-danger" onClick={() => handleDeleteTraining(training.id)}>Delete</button>
                                     )}
                                 </div>

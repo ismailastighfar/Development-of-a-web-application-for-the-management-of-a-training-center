@@ -23,7 +23,7 @@ const CalendarPlanification: React.FC<CalendarPlanificationProps> = ({training_I
 
   const { userHasRole } = useAuth();
 
-  IsEditMode = userHasRole([Roles.Admin , Roles.Assistance]) || !IsEditMode;
+  IsEditMode = userHasRole([Roles.Admin , Roles.Assistance]);
 
   const { Trainingid } = useParams<{ Trainingid?: string }>();
   const [trainingStartDate, setTrainingStartDate] = useState<string>('');
