@@ -191,9 +191,11 @@ const Form = ({
                         disabled={false}
                     />
                 </div>
-                <div className="link-dev">
-                    <a onClick={() => navigate("/PasswordRecovery")}>forget password</a>
-                </div>
+                {option === 1 && (
+                    <div className="link-dev">
+                        <a onClick={() => navigate("/PasswordRecovery")}>forget password</a>
+                    </div>
+                )}
             </div>
             <button className="btn btn-primary" type="submit">
                 {option === 1 ? "Sign in" : "Sign up"}
