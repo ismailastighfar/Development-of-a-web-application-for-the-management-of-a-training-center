@@ -38,7 +38,7 @@ public class TrainingCenterApplication {
 	}
 
 
-@Bean
+//@Bean
 	CommandLineRunner commandLineRunner(ISecurityService securityService , TrainingRepository trainingRepository
 			, PasswordEncoder passwordEncoder, IndividualRepository individualRepository
 										){

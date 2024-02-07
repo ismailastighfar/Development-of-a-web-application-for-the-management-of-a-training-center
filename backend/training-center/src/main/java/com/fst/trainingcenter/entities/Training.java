@@ -1,11 +1,9 @@
 package com.fst.trainingcenter.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fst.trainingcenter.enums.Category;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -37,6 +35,8 @@ public class Training {
     private String code;
     private int maxSessions;
     @ManyToMany(mappedBy = "trainings" , fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Individual> individuals = new ArrayList<>();
     @ManyToOne
     private Trainer trainer;

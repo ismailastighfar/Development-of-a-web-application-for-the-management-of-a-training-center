@@ -43,7 +43,7 @@ public class EmailContentGenerator {
                 + "      <b>Your unique code is: " + training.getCode() + "</b><br>"
                 + "      <p>Include this code in your evaluation form.</p><br>"
                 + "    <div class='button-container' style='text-align: center;'>"
-                + "      <a href='http://localhost:4200' class='button-link'>"
+                + "      <a href='http://localhost:5173/EvaluateTraining/'" + training.getTrainer().getId() +" class='button-link'>"
                 + "       <span style='color: #fff;'> Access Application </span>"
                 + "      </a>"
                 + "    </div>"
