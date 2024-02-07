@@ -22,6 +22,11 @@ export const TrainingSession = (
 
     const [formData, setFormData] = useState<TrainingSessionData>(trainingSessiosData);
 
+    if(formData.IsAllDay){
+        formData.StartTime = '06:00';
+        formData.EndTime = '08:00';
+    }
+
     // Handle form field changes
     const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -43,6 +48,8 @@ export const TrainingSession = (
             [name]: checked,
         });    
     };
+
+
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault(); // Prevent the default form submission behavior

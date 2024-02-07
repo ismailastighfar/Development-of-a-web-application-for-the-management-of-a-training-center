@@ -1,11 +1,11 @@
 import { useState,useEffect , useRef } from "react";
-import { useNavigate} from 'react-router-dom';
 import {  GetIndividualTrainings, CancelEnrollToTraining} from "../../hooks/FO_TrainingList";
 import { useAuth } from "../../context/UserContext";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import Card , {CardData} from "../../components/Card";
-import Popup from "../../components/Popup";
+import Popup from "../../components/Popup"  ;
 import CalendarPlanification from "../../pages/Planification/CalendarPlanification";
+import ConfirmationPopup from "../../components/Confirmation";
 
 
 
@@ -16,11 +16,10 @@ const UserTrainingsList = () => {
 
     console.log(user);
 
-    const navigate = useNavigate();
-
     const [userEnrolledTraining , setUserEnrolledTraining] = useState<any[]>([]);  
     const [showCalendarPopup, setShowCalendarPopup] = useState(false);
     const [selectedTrainingId, setSelectedTrainingId] = useState<number>(0);
+    const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
     const isDataFetched = useRef(false);
 
 
@@ -44,15 +43,9 @@ const UserTrainingsList = () => {
         
     }, []);
 
-   const handleCancelEnroll = async (trainingId: number) => {
-        if(user){
-            try {
-                await CancelEnrollToTraining(trainingId, user.id);
-                fetchUserEnrolledTraining();
-            } catch (error) {
-                alert("Error canceling enroll");
-            }
-        }
+   const handleCancelEnroll = (trainingId: number) => {
+        setSelectedTrainingId(trainingId);
+        setShowConfirmationPopup(true); 
     }
 
     const handlePlanification = (trainingId: number) => {
@@ -60,9 +53,23 @@ const UserTrainingsList = () => {
         setShowCalendarPopup(true);
     }
 
+    const cancelEnrollToTraining = async () => {
+
+        if(user){
+            try {
+                await CancelEnrollToTraining(selectedTrainingId, user.id);
+                fetchUserEnrolledTraining();
+            } catch (error) {
+                alert("Error canceling enroll");
+            }
+        }
+        setShowConfirmationPopup(false);
+    }
+
 
     return (
         <>
+            <h1>My Trainings List</h1>
             <ResponsiveMasonry columnsCountBreakPoints={{ 400: 1, 900: 2, 1350: 3 }} >
                     <Masonry gutter='40px'>
                         {userEnrolledTraining && userEnrolledTraining.map((Training, index) => {
@@ -78,7 +85,7 @@ const UserTrainingsList = () => {
                                 actions : (
                                     <>
                                         <button className='btn' onClick={() => handleCancelEnroll(Training.id)}>Cancel</button>
-                                        <button className='btn btn-primary' onClick={() => handlePlanification(Training.id)}>Planification</button>
+                                        <button className='btn btn-primary' onClick={() => handlePlanification(Training.id)}>Sessions</button>
                                     </>
                                 )
                             }
@@ -97,6 +104,16 @@ const UserTrainingsList = () => {
                         OnClose={() => setShowCalendarPopup(false)}
                     />
                 }
+                 {showConfirmationPopup && (
+                    <ConfirmationPopup
+                        IsOpen={showConfirmationPopup}
+                        content="Are you sure you want to cancel this training"
+                        onConfirm={() => {
+                            cancelEnrollToTraining();
+                        }}
+                        cancelOnClick={() => setShowConfirmationPopup(false)}
+                        />
+                )}
         </>
     );
 };

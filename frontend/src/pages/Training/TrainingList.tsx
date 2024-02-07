@@ -1,7 +1,9 @@
-import { TrainingData , getTrainingList} from "../../hooks/TraininAPI";
+import { getTrainingList , DeleteTraining} from "../../hooks/TraininAPI";
 import { PageResponse } from "../../Common/PageResponseAPI";
-import { ChangeEvent,FormEvent ,useState, useEffect , useRef } from "react";
-import { useParams,useNavigate } from 'react-router-dom';
+import { useState, useEffect , useRef } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useAuth , Roles} from "../../context/UserContext";
+import ConfirmationPopup from "../../components/Confirmation";
 
 
 const TrainingList: React.FC = () => {
@@ -10,8 +12,12 @@ const TrainingList: React.FC = () => {
     const navigate = useNavigate();
     const [pageResponse, setPageResponse] = useState<PageResponse>();
     const [page, setPage] = useState<number>(0);
+    const [selectedTraining, setSelectedTraining] = useState<number>(0);
+    const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
     const maxRecords = 10;
     const isDataFetched = useRef(false);
+
+    const { userHasRole } = useAuth();
 
      // Fetch the user data from the API
      const fetchTraining = async () => {
@@ -31,11 +37,29 @@ const TrainingList: React.FC = () => {
         }
     }, []);
 
+    const handleDeleteTraining = (id: number) => {
+        setSelectedTraining(id);
+        setShowConfirmation(true);
+    }
+
+    const deleteTraining = async () => {
+        try {
+            await DeleteTraining(selectedTraining);
+            alert("Training deleted successfully");
+            fetchTraining();
+        } catch (error) {
+            alert("Error deleting training");
+        }
+        setShowConfirmation(false);
+    }
+
     return (
         <div>
             <div className="section-header">
                 <h1>Trainings List</h1>
-                <button className="btn btn-primary" onClick={() => navigate('/trainingdetail')}>Add Training</button>
+                {userHasRole([Roles.Admin , Roles.Assistance]) && (
+                    <button className="btn btn-primary" onClick={() => navigate('/trainingdetail')}>Add Training</button>
+                )}
             </div>
             <table>
                 <thead>
@@ -59,13 +83,25 @@ const TrainingList: React.FC = () => {
                             <td>
                                 <div className="items-to-right">
                                     <button className="btn" onClick={() => navigate('/trainingdetail/'+training.id)}>Details</button>
-                                    <button className="btn btn-danger" onClick={() => navigate('/trainingdetail/'+training.id)}>Delete</button>
+                                    {userHasRole([Roles.Admin , Roles.Assistance]) && (
+                                    <button className="btn btn-danger" onClick={() => handleDeleteTraining(training.id)}>Delete</button>
+                                    )}
                                 </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            {showConfirmation && (
+                 <ConfirmationPopup
+                    IsOpen={showConfirmation}
+                    content="Are you sure you want to delete this training"
+                    onConfirm={() => {
+                        deleteTraining();
+                    }}
+                    cancelOnClick={() => setShowConfirmation(false)}
+               />
+            )}
         </div>
     );
 

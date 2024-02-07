@@ -1,13 +1,28 @@
 import { createContext, useContext, useState, ReactNode, FC} from "react";
 import { UserData } from "../hooks/UserAPI";
+import AccessDenied from "../layouts/AccessDenied"
+
 
 interface AuthContextProps {
     user: UserData | null;
-    login: (user: UserData) => void;
+    login: (user: UserData) => void;    
     logout: () => void;
+    authRout: (Roles: string[], Children: any) => any;
+    getUserRole: () => string;
+    userHasRole: (Roles?: string[]) => boolean;
 }
 
+
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+
+export const Roles = {
+
+    Individual: "INDIVIDUAL",
+    Trainer: "TRAINER",
+    Admin: "ADMIN",
+    Assistance: "ASSISTANT"
+
+};
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserData | null>(
@@ -27,12 +42,33 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setUser(null);
         // Remove user data from localStorage on logout
         localStorage.removeItem("user");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
     };
+
+    const getUserRole = () => localStorage.getItem("userRole") || Roles.Individual;
+
+    const userHasRole = (Roles?: string[]) => Roles?.includes(getUserRole()) || !Roles?.length;
+
+    const authRout = (Roles: string[], Children: any) => {
+
+        if(Roles.includes(getUserRole()) || !Roles.length){
+            return Children
+        }
+        return <>
+            <AccessDenied />
+        </>
+    }
 
     const contextValue: AuthContextProps = {
         user,
         login,
         logout,
+        authRout,
+        getUserRole,
+        userHasRole
     };
 
     return (
@@ -49,3 +85,6 @@ export const useAuth = () => {
     }
     return context;
 };
+
+
+

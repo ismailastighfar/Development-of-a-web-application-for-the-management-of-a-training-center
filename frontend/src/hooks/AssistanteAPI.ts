@@ -57,3 +57,14 @@ export const GetAllAssistants = () => {
             throw new Error(errorMessage);        
         });
 };
+
+
+// Delete Assistant
+export const DeleteAssistant = (id: number) => {
+    return API.delete(`/assistants/${id}` , { headers })
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+};

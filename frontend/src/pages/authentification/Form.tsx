@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { UserData, createUser, logIn } from "../../hooks/UserAPI";
+import { UserData, createUser, logIn , getUserRoleRequest} from "../../hooks/UserAPI";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/UserContext";
+import { useAuth , Roles} from "../../context/UserContext";
 
 const Form = ({
     option,
@@ -69,9 +69,20 @@ const Form = ({
                 if (response.status === 200) {
                     const userData = formData;
                     userData.id = parseInt(response.data.id);
+                    const userRoles = await getUserRoleRequest(userData.id);
                     login(userData);
                     //Show some message before moving to other page
-                    navigate("/");
+                    console.log(userRoles);
+                    switch (userRoles) {
+                        case Roles.Admin:
+                        case Roles.Assistance:
+                        case Roles.Trainer:
+                            navigate("/");
+                            break;
+                        default:
+                            navigate("/frontoffice/home");
+                            break;
+                    }
                 }
             } catch (error) {
                 alert(error);

@@ -74,3 +74,15 @@ export const getAllCompanies = () => {
 
 
 
+//delete company
+export const DeleteCompany = (id: number) => {
+
+    return API.delete(`/companies/${id}` , {headers}) 
+        .then((res) => res)
+        .catch((error) => {
+            const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
+            throw new Error(errorMessage);        
+        });
+}
+
+
