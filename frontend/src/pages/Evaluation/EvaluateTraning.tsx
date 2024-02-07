@@ -7,7 +7,7 @@ const EvaluateTraining = () => {
 
 
     const { id } = useParams<{ id: string }>();
-    const [TrainingEvaluation, setTrainingEvaluation] = useState<number>(parseInt(id || '0'));
+    const [TrainerEvaluation, setTrainerEvaluation] = useState<number>(parseInt(id || '0'));
     
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -41,7 +41,7 @@ const EvaluateTraining = () => {
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault(); // Prevent the default form submission behavior
-        formData.trainerId = TrainingEvaluation;
+        formData.trainerId = TrainerEvaluation;
         formData.individualId = user?.id || 0;
         try {
             await SaveEvaluation(formData);

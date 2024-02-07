@@ -17,3 +17,15 @@
     align-items: center;
     margin-right: 10px;
 }
+
+
+.link-dev{
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    a{
+        text-decoration: none;
+        cursor: pointer;
+    }
+}

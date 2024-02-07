@@ -19,14 +19,7 @@ export const routesData = [
         path: "/",
         element: <Home />,
         roles: [Roles.Admin, Roles.Assistance, Roles.Trainer],
-        showInNav: true,
-    },
-    {
-        label: "Formations",
-        path: "/formations",
-        element: <Formations />,
-        roles: [Roles.Admin, Roles.Assistance],
-        showInNav: true,
+        showInNav: false,
     },
     {
         label: "Trainer Detail",

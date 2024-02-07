@@ -46,7 +46,7 @@ const TrainingForm: React.FC = () => {
 
     const { userHasRole } = useAuth();
 
-    const [IsformEnabled , setIsformEnabled] = useState<boolean>(userHasRole([Roles.Admin , Roles.Assistance]));
+    const [IsformEnabled , setIsformEnabled] = useState<boolean>(userHasRole([Roles.Admin , Roles.Assistance , Roles.Trainer]));
 
 
     const isDataFetched = useRef(false);
@@ -339,7 +339,7 @@ const handleSubmit = async (event: FormEvent) => {
                             checked={formData?.forCompany}
                             placeholder="is For Company"
                             onChange={handleIsForCompanyChange}
-                            required={true}
+                            required={false}
                             disabled={!IsformEnabled}
                         />
                     </div>
@@ -411,7 +411,7 @@ const handleSubmit = async (event: FormEvent) => {
                             </div>
                         </>
                     )}
-                    {IsformEnabled && (
+                    {IsformEnabled && !userHasRole([Roles.Trainer]) && (
                         <div>
                             <button
                                     className="btn btn-primary"

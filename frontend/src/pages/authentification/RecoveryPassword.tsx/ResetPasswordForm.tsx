@@ -49,7 +49,7 @@ const ResetPasswordForm : React.FC<{BackOnclick? : any}> = ({BackOnclick}) => {
     const ResetRequest = async (token: string, newPassword: string) => {
         try {
             const result = await resetPassword(token, newPassword);
-            if (result && result.data) {
+            if (result.status === 200) {
                 alert('Password reset successfully');
                 navigate('/auth');
                 return

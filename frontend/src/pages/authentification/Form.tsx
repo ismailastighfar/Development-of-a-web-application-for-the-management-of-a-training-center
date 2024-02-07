@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { UserData, createUser, logIn , getUserRoleRequest} from "../../hooks/UserAPI";
 import { useNavigate } from "react-router-dom";
 import { useAuth , Roles} from "../../context/UserContext";
+import { styled } from "@mui/material";
 
 const Form = ({
     option,
@@ -77,7 +78,7 @@ const Form = ({
                         case Roles.Admin:
                         case Roles.Assistance:
                         case Roles.Trainer:
-                            navigate("/");
+                            navigate("/trainings");
                             break;
                         default:
                             navigate("/frontoffice/home");
@@ -189,6 +190,9 @@ const Form = ({
                         required={option === 2}
                         disabled={false}
                     />
+                </div>
+                <div className="link-dev">
+                    <a onClick={() => navigate("/PasswordRecovery")}>forget password</a>
                 </div>
             </div>
             <button className="btn btn-primary" type="submit">

@@ -21,7 +21,7 @@ const headers = {
 //create user Request
 export const createUser = (userData: UserData) => {
     // Send the `userData` directly, not as { userData: userData }
-    return API.post("/individuals", userData , {headers})
+    return API.post("/individuals", userData , {headers: headers})
       .then((res) => res)
       .catch((error) => {
         const errorMessage: string = error.response.data?.message || "Conflict error occurred.";
@@ -62,7 +62,7 @@ export const logIn = (userData: UserData) => {
         "password":userData.password
     }
 
-    return API.post("/login", loginData , {headers})
+    return API.post("/login", loginData , {headers : headers})
     .then((res) => {
       const authResponse: AuthResponse = res.data;
       saveAuthToken('refreshToken', authResponse['refresh-token']);
