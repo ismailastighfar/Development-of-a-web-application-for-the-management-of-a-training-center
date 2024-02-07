@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ public class Individual extends AppUser {
    @DateTimeFormat(pattern = "yyyy-MM-dd")
    private LocalDate dateOfBirth;
    @ManyToMany(fetch = FetchType.EAGER)
+   @ToString.Exclude
    @JoinTable(name = "Enrollment")
    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    private List<Training> trainings;
