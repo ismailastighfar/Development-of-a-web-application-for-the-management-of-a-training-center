@@ -3,6 +3,7 @@ package com.fst.trainingcenter.entities;
 import com.fst.trainingcenter.enums.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Training {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

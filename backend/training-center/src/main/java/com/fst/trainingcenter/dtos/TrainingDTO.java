@@ -3,6 +3,7 @@ package com.fst.trainingcenter.dtos;
 import com.fst.trainingcenter.enums.Category;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
