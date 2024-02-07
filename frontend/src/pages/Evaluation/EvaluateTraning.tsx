@@ -14,7 +14,6 @@ const EvaluateTraining = () => {
 
     const initialFormData: EvaluationData = {
 
-        id: 0,
         pedagogicalQuality: "",
         pace: "",
         courseSupport: "",
@@ -69,7 +68,7 @@ const EvaluateTraining = () => {
                             <input
                                 id="code"
                                 name="code"
-                                type="number"
+                                type="text"
                                 value={formData?.code}
                                 placeholder="code"
                                 onChange={handleFormChange}
